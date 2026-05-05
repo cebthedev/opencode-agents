@@ -4,6 +4,8 @@
     "external_directory": {
       "*": "ask",
       "~/.local/share/opencode/tool-output/*": "allow",
+      "~/.config/opencode/lazy-skills/*": "allow",
+      "~/.config/opencode/skills/*": "allow",
       "~/.claude/skills/*": "allow",
       "~/.agents/skills/*": "allow",
       "/tmp/opencode/*": "allow",
@@ -360,6 +362,7 @@
   },
   "plugin": [
     "opencode-auto-fallback",
-    "@zenobius/opencode-skillful"
+    "@zenobius/opencode-skillful",
+    "oh-my-opencode-slim"
   ]
 }
