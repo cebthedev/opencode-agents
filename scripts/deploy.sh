@@ -77,24 +77,42 @@ deploy_config() {
         echo -e "  ${GREEN}Deployed: fallback.json${RESET}"
     fi
     
+    # Copy oh-my-opencode-slim.json
+    if [ -f "$CONFIG_SOURCE/oh-my-opencode-slim.json" ]; then
+        cp "$CONFIG_SOURCE/oh-my-opencode-slim.json" "$TARGET_DIR/oh-my-opencode-slim.json"
+        echo -e "  ${GREEN}Deployed: oh-my-opencode-slim.json${RESET}"
+    fi
+    
+    # Copy lazy.config.json
+    if [ -f "$REPO_DIR/lazy.config.json" ]; then
+        cp "$REPO_DIR/lazy.config.json" "$TARGET_DIR/lazy.config.json"
+        echo -e "  ${GREEN}Deployed: lazy.config.json${RESET}"
+    fi
+    
     echo -e "${GREEN}Configuration deployed successfully!${RESET}"
 }
 
 deploy_skills() {
     echo -e "${BLUE}Deploying skills...${RESET}"
     
-    # Create skills directory
-    mkdir -p "$TARGET_DIR/skills/local"
-    
-    # Copy local skills from repo
-    if [ -d "$REPO_DIR/skills/claude" ]; then
-        echo -e "${BLUE}Copying claude skills...${RESET}"
-        cp -r "$REPO_DIR/skills/claude/"* "$TARGET_DIR/skills/local/" 2>/dev/null || true
+    # Deploy global skills (always loaded)
+    if [ -d "$REPO_DIR/skills/global" ]; then
+        echo -e "${BLUE}Deploying global skills...${RESET}"
+        mkdir -p "$TARGET_DIR/skills"
+        rm -rf "$TARGET_DIR/skills/*"
+        cp -r "$REPO_DIR/skills/global/"* "$TARGET_DIR/skills/" 2>/dev/null || true
+        global_count=$(ls "$REPO_DIR/skills/global/" 2>/dev/null | wc -l | tr -d ' ')
+        echo -e "  ${GREEN}Deployed $global_count global skills${RESET}"
     fi
     
-    if [ -d "$REPO_DIR/skills/agents" ]; then
-        echo -e "${BLUE}Copying agents skills...${RESET}"
-        cp -r "$REPO_DIR/skills/agents/"* "$TARGET_DIR/skills/local/" 2>/dev/null || true
+    # Deploy lazy-loaded skills
+    if [ -d "$REPO_DIR/lazy-skills" ]; then
+        echo -e "${BLUE}Deploying lazy-loaded skills...${RESET}"
+        mkdir -p "$TARGET_DIR/lazy-skills"
+        rm -rf "$TARGET_DIR/lazy-skills/*"
+        cp -r "$REPO_DIR/lazy-skills/"* "$TARGET_DIR/lazy-skills/" 2>/dev/null || true
+        lazy_count=$(ls "$REPO_DIR/lazy-skills/" 2>/dev/null | wc -l | tr -d ' ')
+        echo -e "  ${GREEN}Deployed $lazy_count lazy-loaded skills${RESET}"
     fi
     
     # Copy skill registry
