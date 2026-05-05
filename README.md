@@ -5,6 +5,9 @@ A comprehensive agent configuration for [OpenCode](https://opencode.ai) with **c
 ## Features
 
 - **Multi-provider resilience** — 4 model providers with automatic fallback
+- **Pantheon Agent Orchestration** — 8 specialized agents via oh-my-opencode-slim (@orchestrator auto-delegates)
+- **Lazy-Loaded Skills** — 220+ skills on-demand via skill_find/skill_use
+- **OpenSpec Workflow** — Structured planning and implementation workflow
 - **Vim-centric TUI** — Vim muscle memory keybinds for comfortable scrolling
 - **Auto-fallback plugin** — Intelligent retry with provider switching
 - **Large context fallback** — Automatic switch to bigger context models
@@ -13,15 +16,18 @@ A comprehensive agent configuration for [OpenCode](https://opencode.ai) with **c
 ## Quick Start
 
 ```bash
-# Full installation
+# Full installation (deploys configs, skills, agents)
 make all
 
+# Install Pantheon agents (run once)
+bunx oh-my-opencode-slim@latest install
+
 # Or step by step
-make setup      # Initialize submodule and directories
-make plugins    # Install opencode-auto-fallback
-make skills     # Parse and clone skill repositories
-make agents     # Deploy agent configurations
-make deploy     # Deploy main configuration
+make setup              # Create directories
+make skills-deploy      # Deploy lazy-loaded and global skills
+make agents             # Deploy agent configurations
+make deploy             # Deploy configuration files
+make plugins            # Show plugin installation commands
 ```
 
 ## Prerequisites
@@ -253,52 +259,102 @@ fetch_fetch url="https://example.com" max_length=5000
 
 ## Skills
 
-Skills are automatically parsed from [awesome-agent-skills](https://github.com/kodustech/awesome-agent-skills) and integrated with your existing `~/.claude/skills/`.
+### Lazy-Loaded Skills (219 skills)
 
-### Skill Categories
+Skills are organized into **lazy-loaded** (on-demand) and **globally loaded** (always available):
 
-- Frontend Development
-- Backend Development
-- DevOps
-- Testing & QA
-- Security
-- Observability
-- Performance
-- Mobile Development
-- Blockchain
-- Infrastructure
-- Data Science
-- AI/ML
-- Tooling
-- Code Review
-
-### Additional Skills
-
-The following local skill directories are also included:
-
-**~/.agents/skills/** (20+ skills)
-- content-humanizer
-- architecture-decision-records
-- drawio-diagrams-enhanced
-- openspec-* (OpenSpec workflow skills)
-- pdf-to-markdown
-- python-design-patterns
-- python-qa
-- software-architecture
-- tessl__deep-research
-
-**~/.claude/skills/** (189+ skills)
+**`lazy-skills/`** (219 skills) — Loaded on-demand via `skill_find` and `skill_use`:
 - Scientific computing (bioinformatics, chemistry, astronomy)
-- Data analysis (pandas, polars, dask)
+- Data analysis (pandas, polars, dask, vaex)
 - Machine learning (scikit-learn, pytorch, transformers)
 - Visualization (matplotlib, seaborn, plotly)
+- OpenSpec workflow skills (openspec-explore, openspec-new-change, etc.)
 - And many more...
+
+**`skills/global/`** (6 skills) — Always loaded:
+- deepthink — Structured reasoning
+- python-design-patterns — Architecture patterns
+- python-qa — Code quality
+- software-architecture — Design decisions
+- decision-critic — Validation
+- content-humanizer — Writing style
+
+### Using Skills
+
+Agents discover and load skills automatically:
+
+```bash
+# Find skills by keyword
+skill_find('data visualization')
+
+# Load specific skills
+skill_use(['seaborn', 'matplotlib'])
+
+# Read files from a skill
+skill_resource('python-design-patterns', 'SKILL.md')
+```
 
 ### Skill Registry
 
-After running `make skills`, a searchable registry is created at:
+The registry maps skills to agents by category:
 ```
-~/.config/opencode/skills/registry.json
+skills/registry.json
+```
+
+## Pantheon Agents (via oh-my-opencode-slim)
+
+The Pantheon provides 8 specialized agents that auto-delegate via **@orchestrator**:
+
+| Agent | Role | When to Use |
+|-------|------|-------------|
+| **@orchestrator** | Master delegator | Complex multi-step tasks requiring coordination |
+| **@explorer** | Codebase reconnaissance | Deep codebase exploration and understanding |
+| **@oracle** | Strategic advisor | Architecture decisions, hard debugging, trade-offs |
+| **@council** | Multi-LLM consensus | When you need diverse perspectives |
+| **@librarian** | Knowledge retrieval | Documentation lookup and research |
+| **@designer** | UI/UX implementation | Frontend and visual work |
+| **@fixer** | Fast implementation | Routine, scoped coding tasks |
+| **@observer** | Visual analysis | Images, screenshots, PDFs |
+
+### Usage
+
+```bash
+# Orchestrator auto-delegates based on task
+@orchestrator implement user authentication
+
+# Manual delegation to specific agents
+@explorer analyze this codebase structure
+@oracle compare microservices vs monolith
+@council evaluate these two approaches
+```
+
+### Presets
+
+Switch between model presets at runtime:
+```bash
+/preset              # Show available presets
+/preset custom       # Use custom preset (kimi/deepseek/gemini)
+```
+
+## OpenSpec Workflow (via opencode-plugin-openspec)
+
+Structured workflow for planning and implementation:
+
+```bash
+# 1. Explore and clarify requirements
+openspec-explore
+
+# 2. Create structured change plan
+openspec-new-change
+
+# 3. Implement step-by-step
+openspec-apply-change
+
+# 4. Validate against specs
+openspec-verify-change
+
+# 5. Resume existing work
+openspec-continue-change
 ```
 
 ## Configuration
@@ -344,20 +400,19 @@ Agent instructions here...
 ## Commands
 
 ```bash
-make all           # Full setup and deployment
-make setup         # Initialize submodule and directories
-make plugins       # Install opencode-auto-fallback
-make skills        # Parse and clone skills
-make skills-deploy # Deploy local skills
-make agents        # Deploy agents
-make deploy        # Deploy configuration
-make install       # Full installation with next steps
-make validate      # Validate all JSON configs
-make test          # Validate configuration
-make submodules    # Update all git submodules
-make clean         # Remove deployed configs
-make update        # Update awesome-agent-skills submodule
-make help          # Show all targets
+make all                # Full setup and deployment
+make setup              # Create directories
+make skills-deploy      # Deploy lazy-loaded and global skills
+make lazy-skills-deploy # Deploy lazy-loaded skills only
+make global-skills-deploy # Deploy global skills only
+make agents             # Deploy agent configurations
+make deploy             # Deploy configuration files
+make plugins            # Show plugin installation commands
+make install            # Full installation with next steps
+make validate           # Validate all JSON configs
+make test               # Validate configuration
+make clean              # Remove deployed configs
+make help               # Show all targets
 ```
 
 ## Project Structure
@@ -367,10 +422,11 @@ opencode-agents/
 ├── Makefile                          # Main orchestrator
 ├── README.md                         # This file
 ├── .env.example                      # API key template
-├── .gitmodules                       # Git submodule config
-├── awesome-opencode/                 # Git submodule (plugins & resources)
-├── awesome-agent-skills/             # Git submodule (skills list)
-├── agents/                           # Agent definitions
+├── lazy-skills/                      # 219 lazy-loaded skills
+├── skills/
+│   ├── global/                       # 6 always-loaded skills
+│   └── registry.json                 # Skill-to-agent mappings
+├── agents/                           # 12 agent definitions
 │   ├── build.md                      # Primary: Development
 │   ├── research.md                   # Primary: Research
 │   ├── plan.md                       # Primary: Planning
@@ -386,10 +442,11 @@ opencode-agents/
 ├── config/
 │   ├── opencode.json                 # Main configuration
 │   ├── tui.json                      # TUI keybinds
-│   └── fallback.json                 # Auto-fallback plugin config
-└── scripts/
-    ├── setup-skills.sh               # Parse & clone skills
-    └── deploy.sh                     # Deploy configs
+│   ├── fallback.json                 # Auto-fallback plugin config
+│   └── oh-my-opencode-slim.json      # Pantheon agent presets
+├── scripts/
+│   └── deploy.sh                     # Deploy configs to ~/.config/opencode/
+└── lazy.config.json                  # Lazy-loading configuration
 ```
 
 ## Usage Examples
@@ -460,9 +517,9 @@ make skills
 3. Check if a provider is in cooldown (2 min default)
 
 ### Skills not found
-1. Run `make skills` to parse and clone
-2. Check `~/.config/opencode/skills/registry.json`
-3. Verify Python 3.8+ is installed
+1. Run `make skills-deploy` to deploy skills
+2. Check `~/.config/opencode/lazy-skills/` exists
+3. Verify `lazy.config.json` is deployed to `~/.config/opencode/lazy.config.json`
 
 ### Can't scroll in message buffer
 1. Use `ctrl+d` / `ctrl+u` for half-page scrolling (Vim-style)

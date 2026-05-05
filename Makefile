@@ -95,9 +95,11 @@ install: all ## Full installation (setup + skills + agents + config + plugins)
 plugins: ## Install and update OpenCode plugins
 	@echo "$(BLUE)Installing plugins...$(RESET)"
 	@npm install -g opencode-auto-fallback@latest 2>/dev/null || true
-	@echo "$(YELLOW)Note: Install these plugins manually if not already installed:$(RESET)"
-	@echo "  - oh-my-opencode-slim"
-	@echo "  - @zenobius/opencode-skillful"
+	@echo "$(YELLOW)Install these plugins manually:$(RESET)"
+	@echo "  1. bunx oh-my-opencode-slim@latest install"
+	@echo "     (generates oh-my-opencode-slim.json with Pantheon agents)"
+	@echo "  2. opencode plugin add @zenobius/opencode-skillful --global"
+	@echo "  3. opencode plugin add opencode-plugin-openspec --global"
 	@echo "$(YELLOW)Skipped (known issues):$(RESET)"
 	@echo "  - @tarquinen/opencode-dcp"
 	@echo "$(GREEN)✓ Plugin references updated!$(RESET)"
