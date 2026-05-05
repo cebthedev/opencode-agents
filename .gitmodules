@@ -1,4 +1,0 @@
-[submodule "awesome-agent-skills"]
-	path = awesome-agent-skills
-	url = https://github.com/kodustech/awesome-agent-skills.git
-	branch = main
