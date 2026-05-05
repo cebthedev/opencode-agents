@@ -76,6 +76,25 @@ install: all ## Full installation (setup + skills + agents + config)
 	@echo "  3. Use Tab to switch between primary agents"
 	@echo "  4. Use @ to invoke subagents"
 
+
+plugins: ## Install and update OpenCode plugins
+	@echo "$(BLUE)Installing plugins...$(RESET)"
+	@npm install -g opencode-auto-fallback@latest
+	@echo "$(GREEN)Plugins installed!$(RESET)"
+
+validate: ## Validate all JSON configs
+	@echo "$(BLUE)Validating configuration...$(RESET)"
+	@python3 -c "import json; json.load(open('config/opencode.json'))" && echo "  $(GREEN)✓ opencode.json$(RESET)"
+	@python3 -c "import json; json.load(open('config/tui.json'))" && echo "  $(GREEN)✓ tui.json$(RESET)"
+	@python3 -c "import json; json.load(open('config/fallback.json'))" && echo "  $(GREEN)✓ fallback.json$(RESET)"
+	@echo "$(GREEN)All configs valid!$(RESET)"
+
+submodules: ## Update all git submodules
+	@echo "$(BLUE)Updating submodules...$(RESET)"
+	@git submodule update --init --recursive
+	@git submodule update --remote
+	@echo "$(GREEN)Submodules updated!$(RESET)"
+
 clean: ## Remove deployed configurations
 	@echo "$(RED)Cleaning deployed configurations...$(RESET)"
 	@rm -rf ~/.config/opencode/agents/*.md

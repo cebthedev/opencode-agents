@@ -1,7 +1,7 @@
 ---
 description: Paper analysis agent for downloading and analyzing scientific papers
 mode: subagent
-model: opencode-go/deepseek-v4-pro
+model: deepseek/deepseek-chat
 temperature: 0.7
 permission:
   read: allow
@@ -19,7 +19,7 @@ permission:
   question: allow
 hidden: false
 mcp:
-  - webresearch
+  - arxiv-mcp-server
   - context7
   - fetch
 skills:
@@ -27,6 +27,10 @@ skills:
     - research
     - bioinformatics
   auto_detect: true
+fallback_models:
+  - kimi-for-coding/k2p6
+  - google/gemini-2.5-pro
+  - opencode-go/deepseek-v4-pro
 ---
 
 You are a Paper Analyst specializing in scientific literature analysis.

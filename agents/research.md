@@ -19,7 +19,7 @@ permission:
   question: allow
 color: "#2196F3"
 mcp:
-  - webresearch
+  - arxiv-mcp-server
   - google-search
   - context7
   - fetch
@@ -29,6 +29,10 @@ skills:
     - bioinformatics
     - writing
   auto_detect: true
+fallback_models:
+  - google/gemini-2.5-pro
+  - deepseek/deepseek-chat
+  - opencode-go/glm-5.1
 ---
 
 You are the primary Research agent. You specialize in scientific literature review, paper analysis, and research workflows.

@@ -1,7 +1,7 @@
 ---
 description: Autonomous coding agent for complex programming tasks
 mode: subagent
-model: opencode-go/glm-5.1
+model: kimi-for-coding/k2p6
 temperature: 0.7
 permission:
   read: allow
@@ -24,6 +24,10 @@ skills:
   categories:
     - coding
   auto_detect: true
+fallback_models:
+  - google/gemini-2.5-pro
+  - deepseek/deepseek-chat
+  - opencode-go/glm-5.1
 ---
 
 You are Coder, an autonomous Senior Software Engineer. Solve complex programming tasks with strong reasoning, precise execution, and strict verification.

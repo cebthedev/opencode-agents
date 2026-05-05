@@ -65,6 +65,18 @@ deploy_config() {
         exit 1
     fi
     
+    # Copy tui.json
+    if [ -f "$CONFIG_SOURCE/tui.json" ]; then
+        cp "$CONFIG_SOURCE/tui.json" "$TARGET_DIR/tui.json"
+        echo -e "  ${GREEN}Deployed: tui.json${RESET}"
+    fi
+    
+    # Copy fallback.json
+    if [ -f "$CONFIG_SOURCE/fallback.json" ]; then
+        cp "$CONFIG_SOURCE/fallback.json" "$TARGET_DIR/fallback.json"
+        echo -e "  ${GREEN}Deployed: fallback.json${RESET}"
+    fi
+    
     echo -e "${GREEN}Configuration deployed successfully!${RESET}"
 }
 

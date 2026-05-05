@@ -1,0 +1,87 @@
+{
+  "$schema": "https://raw.githubusercontent.com/HyeokjaeLee/opencode-auto-fallback/main/docs/fallback.schema.json",
+  "enabled": true,
+  "defaultFallback": [
+    "kimi-for-coding/k2p6",
+    "google/gemini-2.5-pro",
+    "deepseek/deepseek-chat",
+    "opencode-go/glm-5.1"
+  ],
+  "agentFallbacks": {
+    "build": [
+      "kimi-for-coding/k2p6",
+      "google/gemini-2.5-pro",
+      "deepseek/deepseek-chat",
+      "opencode-go/glm-5.1"
+    ],
+    "coder": [
+      "kimi-for-coding/k2p6",
+      "google/gemini-2.5-pro",
+      "deepseek/deepseek-chat",
+      "opencode-go/glm-5.1"
+    ],
+    "plan": [
+      "google/gemini-2.5-pro",
+      "deepseek/deepseek-reasoner",
+      "opencode-go/glm-5",
+      "kimi-for-coding/k2p6"
+    ],
+    "research": [
+      "kimi-for-coding/k2p6",
+      "google/gemini-2.5-pro",
+      "deepseek/deepseek-chat",
+      "opencode-go/glm-5.1"
+    ],
+    "clean-coder": [
+      "kimi-for-coding/k2p6",
+      "opencode-go/glm-5.1",
+      "google/gemini-2.5-pro"
+    ],
+    "code-reviewer": [
+      "kimi-for-coding/k2p6",
+      "opencode-go/glm-5.1",
+      "google/gemini-2.5-pro"
+    ],
+    "beagle": [
+      "google/gemini-2.5-flash",
+      "kimi-for-coding/k2p6",
+      "opencode-go/glm-5.1"
+    ],
+    "paper-analyst": [
+      "deepseek/deepseek-chat",
+      "kimi-for-coding/k2p6",
+      "google/gemini-2.5-pro",
+      "opencode-go/deepseek-v4-pro"
+    ],
+    "researcher": [
+      "kimi-for-coding/k2p6",
+      "google/gemini-2.5-pro",
+      "deepseek/deepseek-chat"
+    ],
+    "architect": [
+      "google/gemini-2.5-pro",
+      "deepseek/deepseek-reasoner",
+      "opencode-go/glm-5",
+      "kimi-for-coding/k2p6"
+    ],
+    "writer": [
+      "google/gemini-2.5-pro",
+      "opencode-go/glm-5",
+      "kimi-for-coding/k2p6"
+    ],
+    "data-scientist": [
+      "deepseek/deepseek-reasoner",
+      "google/gemini-2.5-pro",
+      "opencode-go/qwen3.6-plus",
+      "kimi-for-coding/k2p6"
+    ]
+  },
+  "largeContextFallback": {
+    "agents": ["build", "coder", "research", "clean-coder", "paper-analyst"],
+    "model": "deepseek/deepseek-chat",
+    "minContextRatio": 0.2
+  },
+  "cooldownMs": 120000,
+  "maxRetries": 3,
+  "logging": true
+}

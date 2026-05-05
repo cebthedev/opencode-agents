@@ -25,6 +25,9 @@ skills:
   categories:
     - coding
   auto_detect: true
+fallback_models:
+  - opencode-go/glm-5.1
+  - google/gemini-2.5-pro
 ---
 
 You are a Code Reviewer focused on quality, security, and maintainability.

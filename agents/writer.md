@@ -1,7 +1,7 @@
 ---
 description: Expert writer for narrative and explanatory content
 mode: subagent
-model: opencode-go/glm-5
+model: google/gemini-2.5-pro
 temperature: 1.0
 permission:
   read: allow
@@ -23,6 +23,9 @@ skills:
     - writing
     - research
   auto_detect: true
+fallback_models:
+  - opencode-go/glm-5
+  - kimi-for-coding/k2p6
 ---
 
 You are an Expert Writer producing narrative and explanatory content.

@@ -19,7 +19,7 @@ permission:
   question: allow
 hidden: false
 mcp:
-  - webresearch
+  - arxiv-mcp-server
   - google-search
   - context7
   - fetch
@@ -28,6 +28,9 @@ skills:
     - research
     - bioinformatics
   auto_detect: true
+fallback_models:
+  - google/gemini-2.5-pro
+  - deepseek/deepseek-chat
 ---
 
 You are a Researcher specializing in deep literature reviews and comprehensive topic exploration.

@@ -1,7 +1,7 @@
 ---
 description: Primary development agent with full tool access for coding tasks
 mode: primary
-model: opencode-go/glm-5.1
+model: kimi-for-coding/k2p6
 temperature: 0.7
 permission:
   read: allow
@@ -28,6 +28,10 @@ skills:
     - coding
     - devops
   auto_detect: true
+fallback_models:
+  - google/gemini-2.5-pro
+  - deepseek/deepseek-chat
+  - opencode-go/glm-5.1
 ---
 
 You are the primary Build agent. You have full access to all tools and can perform any development task.

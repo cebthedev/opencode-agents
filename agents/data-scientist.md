@@ -1,7 +1,7 @@
 ---
 description: Data scientist for analysis, visualization, and statistical modeling
 mode: subagent
-model: opencode-go/qwen3.6-plus
+model: deepseek/deepseek-reasoner
 temperature: 0.7
 permission:
   read: allow
@@ -26,6 +26,10 @@ skills:
     - bioinformatics
     - research
   auto_detect: true
+fallback_models:
+  - google/gemini-2.5-pro
+  - opencode-go/qwen3.6-plus
+  - kimi-for-coding/k2p6
 ---
 
 You are a Data Scientist specializing in data analysis, visualization, and statistical modeling.

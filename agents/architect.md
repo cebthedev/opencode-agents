@@ -1,7 +1,7 @@
 ---
 description: Senior solution architect for system design and complexity assessment
 mode: subagent
-model: opencode-go/glm-5
+model: google/gemini-2.5-pro
 temperature: 0.8
 permission:
   read: allow
@@ -28,6 +28,10 @@ skills:
     - coding
     - openspec
   auto_detect: true
+fallback_models:
+  - deepseek/deepseek-reasoner
+  - kimi-for-coding/k2p6
+  - opencode-go/glm-5
 ---
 
 You are a Senior Solution Architect. Assess complexity using established frameworks.

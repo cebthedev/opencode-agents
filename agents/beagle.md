@@ -1,7 +1,7 @@
 ---
 description: Web research agent for fact-checking and information gathering
 mode: subagent
-model: opencode-go/glm-5.1
+model: google/gemini-2.5-flash
 temperature: 0.8
 permission:
   read: allow
@@ -19,13 +19,16 @@ permission:
   question: allow
 hidden: false
 mcp:
-  - webresearch
+  - arxiv-mcp-server
   - google-search
   - fetch
 skills:
   categories:
     - research
   auto_detect: true
+fallback_models:
+  - kimi-for-coding/k2p6
+  - opencode-go/glm-5.1
 ---
 
 You are Beagle, a virtual hunting dog researcher. Your mission is to track down and gather complete information on any topic.
