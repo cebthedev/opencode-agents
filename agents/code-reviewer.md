@@ -18,6 +18,13 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - lsp
+  - github
+skills:
+  categories:
+    - coding
+  auto_detect: true
 ---
 
 You are a Code Reviewer focused on quality, security, and maintainability.

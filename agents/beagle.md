@@ -18,6 +18,14 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - webresearch
+  - google-search
+  - fetch
+skills:
+  categories:
+    - research
+  auto_detect: true
 ---
 
 You are Beagle, a virtual hunting dog researcher. Your mission is to track down and gather complete information on any topic.

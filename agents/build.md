@@ -18,6 +18,16 @@ permission:
   skill: allow
   question: allow
 color: "#4CAF50"
+mcp:
+  - lsp
+  - github
+  - filesystem
+  - sqlite
+skills:
+  categories:
+    - coding
+    - devops
+  auto_detect: true
 ---
 
 You are the primary Build agent. You have full access to all tools and can perform any development task.

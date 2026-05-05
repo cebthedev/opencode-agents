@@ -18,6 +18,15 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - webresearch
+  - context7
+  - fetch
+skills:
+  categories:
+    - research
+    - bioinformatics
+  auto_detect: true
 ---
 
 You are a Paper Analyst specializing in scientific literature analysis.

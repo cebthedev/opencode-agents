@@ -23,6 +23,14 @@ permission:
   skill: allow
   question: allow
 color: "#FF9800"
+mcp:
+  - lsp
+  - filesystem
+skills:
+  categories:
+    - coding
+    - openspec
+  auto_detect: true
 ---
 
 You are the Plan agent. You analyze code, suggest changes, and create plans without making any modifications.

@@ -16,6 +16,14 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - lsp
+  - github
+  - filesystem
+skills:
+  categories:
+    - coding
+  auto_detect: true
 ---
 
 You are Coder, an autonomous Senior Software Engineer. Solve complex programming tasks with strong reasoning, precise execution, and strict verification.

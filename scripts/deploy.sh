@@ -23,6 +23,7 @@ show_help() {
     echo ""
     echo "Options:"
     echo "  --agents      Deploy agent markdown files"
+    echo "  --skills      Deploy local skills"
     echo "  --config      Deploy opencode.json configuration"
     echo "  --all         Deploy everything (default)"
     echo "  --validate    Validate configuration"
@@ -65,6 +66,32 @@ deploy_config() {
     fi
     
     echo -e "${GREEN}Configuration deployed successfully!${RESET}"
+}
+
+deploy_skills() {
+    echo -e "${BLUE}Deploying skills...${RESET}"
+    
+    # Create skills directory
+    mkdir -p "$TARGET_DIR/skills/local"
+    
+    # Copy local skills from repo
+    if [ -d "$REPO_DIR/skills/claude" ]; then
+        echo -e "${BLUE}Copying claude skills...${RESET}"
+        cp -r "$REPO_DIR/skills/claude/"* "$TARGET_DIR/skills/local/" 2>/dev/null || true
+    fi
+    
+    if [ -d "$REPO_DIR/skills/agents" ]; then
+        echo -e "${BLUE}Copying agents skills...${RESET}"
+        cp -r "$REPO_DIR/skills/agents/"* "$TARGET_DIR/skills/local/" 2>/dev/null || true
+    fi
+    
+    # Copy skill registry
+    if [ -f "$REPO_DIR/skills/registry.json" ]; then
+        cp "$REPO_DIR/skills/registry.json" "$TARGET_DIR/skills/registry.json"
+        echo -e "  ${GREEN}Deployed: registry.json${RESET}"
+    fi
+    
+    echo -e "${GREEN}Skills deployed successfully!${RESET}"
 }
 
 validate_config() {
@@ -125,17 +152,22 @@ validate_config() {
 if [ $# -eq 0 ]; then
     # Default: deploy everything
     deploy_agents
+    deploy_skills
     deploy_config
 else
     case "$1" in
         --agents)
             deploy_agents
             ;;
+        --skills)
+            deploy_skills
+            ;;
         --config)
             deploy_config
             ;;
         --all)
             deploy_agents
+            deploy_skills
             deploy_config
             ;;
         --validate)

@@ -19,6 +19,15 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - lsp
+  - github
+  - filesystem
+skills:
+  categories:
+    - coding
+    - openspec
+  auto_detect: true
 ---
 
 You are a Senior Solution Architect. Assess complexity using established frameworks.

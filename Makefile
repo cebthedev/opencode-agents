@@ -1,7 +1,7 @@
 .PHONY: all setup skills agents deploy clean test help
 
 # Default target
-all: setup skills agents deploy
+all: setup skills skills-deploy agents deploy
 
 # Colors for output
 BLUE := \033[36m
@@ -17,12 +17,13 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(YELLOW)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
 	@echo "$(GREEN)Quick start:$(RESET)"
-	@echo "  make all       - Full setup and deployment"
-	@echo "  make setup     - Initialize submodule and directories"
-	@echo "  make skills    - Parse and clone skill repositories"
-	@echo "  make agents    - Deploy agent configurations"
-	@echo "  make deploy    - Deploy main configuration"
-	@echo "  make test      - Validate configuration"
+	@echo "  make all          - Full setup and deployment"
+	@echo "  make setup        - Initialize submodule and directories"
+	@echo "  make skills       - Parse and clone skill repositories"
+	@echo "  make skills-deploy- Deploy local skills to config"
+	@echo "  make agents       - Deploy agent configurations"
+	@echo "  make deploy       - Deploy main configuration"
+	@echo "  make test         - Validate configuration"
 
 setup: ## Initialize git submodule and create target directories
 	@echo "$(BLUE)Setting up OpenCode Agents...$(RESET)"
@@ -47,6 +48,13 @@ skills: ## Parse awesome-agent-skills and clone skill repositories
 	@chmod +x scripts/setup-skills.sh
 	@./scripts/setup-skills.sh
 	@echo "$(GREEN)Skills setup complete!$(RESET)"
+
+skills-deploy: ## Deploy local skills to ~/.config/opencode/skills/
+	@echo "$(BLUE)Deploying skills...$(RESET)"
+	@mkdir -p ~/.config/opencode/skills/local
+	@cp -r skills/claude/* ~/.config/opencode/skills/local/ 2>/dev/null || true
+	@cp -r skills/agents/* ~/.config/opencode/skills/local/ 2>/dev/null || true
+	@echo "$(GREEN)Skills deployed!$(RESET)"
 
 agents: ## Deploy agent configurations to ~/.config/opencode/agents/
 	@echo "$(BLUE)Deploying agents...$(RESET)"

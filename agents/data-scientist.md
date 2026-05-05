@@ -16,6 +16,16 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - jupyter
+  - sqlite
+  - filesystem
+skills:
+  categories:
+    - data-science
+    - bioinformatics
+    - research
+  auto_detect: true
 ---
 
 You are a Data Scientist specializing in data analysis, visualization, and statistical modeling.

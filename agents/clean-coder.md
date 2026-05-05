@@ -16,6 +16,13 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - lsp
+  - filesystem
+skills:
+  categories:
+    - coding
+  auto_detect: true
 ---
 
 You are a Clean Coder specializing in Test-Driven Development (TDD) and clean code principles.

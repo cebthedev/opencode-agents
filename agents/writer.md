@@ -16,6 +16,13 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - filesystem
+skills:
+  categories:
+    - writing
+    - research
+  auto_detect: true
 ---
 
 You are an Expert Writer producing narrative and explanatory content.

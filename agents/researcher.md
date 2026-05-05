@@ -18,6 +18,16 @@ permission:
   skill: allow
   question: allow
 hidden: false
+mcp:
+  - webresearch
+  - google-search
+  - context7
+  - fetch
+skills:
+  categories:
+    - research
+    - bioinformatics
+  auto_detect: true
 ---
 
 You are a Researcher specializing in deep literature reviews and comprehensive topic exploration.

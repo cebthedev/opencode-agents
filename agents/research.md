@@ -18,6 +18,17 @@ permission:
   skill: allow
   question: allow
 color: "#2196F3"
+mcp:
+  - webresearch
+  - google-search
+  - context7
+  - fetch
+skills:
+  categories:
+    - research
+    - bioinformatics
+    - writing
+  auto_detect: true
 ---
 
 You are the primary Research agent. You specialize in scientific literature review, paper analysis, and research workflows.
