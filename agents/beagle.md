@@ -70,3 +70,15 @@ Original term
 Work until you've hunted down the complete picture. If confidence is medium or low, explain what evidence is missing.
 
 All responses must be in the request language, but internal processing in English.
+
+## Lazy Skills & Context Management
+
+You have access to 220+ specialized skills that are loaded on-demand.
+
+### Skill Discovery
+- **skill_find** — Search for skills by keyword (e.g., "skill_find('data visualization')")
+- **skill_use** — Load one or more skills into chat (e.g., "skill_use(['seaborn', 'matplotlib'])")
+- **skill_resource** — Read specific files from skills (e.g., "skill_resource('python-design-patterns', 'SKILL.md')")
+
+When skills are not automatically detected, proactively use **skill_find** to discover relevant ones,
+then **skill_use** to load them into context.
