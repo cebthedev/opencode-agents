@@ -1,0 +1,348 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "build": {
+      "description": "Primary development agent with full tool access",
+      "mode": "primary",
+      "model": "opencode-go/glm-5.1",
+      "temperature": 0.7,
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "bash": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      },
+      "color": "#4CAF50"
+    },
+    "research": {
+      "description": "Primary research agent for literature and scientific analysis",
+      "mode": "primary",
+      "model": "kimi-for-coding/k2p6",
+      "temperature": 0.8,
+      "permission": {
+        "read": "allow",
+        "edit": "ask",
+        "write": "ask",
+        "bash": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      },
+      "color": "#2196F3"
+    },
+    "plan": {
+      "description": "Planning agent for analysis without making changes",
+      "mode": "primary",
+      "model": "opencode-go/glm-5",
+      "temperature": 0.1,
+      "permission": {
+        "read": "allow",
+        "edit": "deny",
+        "write": "deny",
+        "bash": {
+          "*": "ask",
+          "git diff": "allow",
+          "git log*": "allow",
+          "grep *": "allow",
+          "find *": "allow"
+        },
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      },
+      "color": "#FF9800"
+    },
+    "coder": {
+      "description": "Autonomous coding agent for complex programming tasks",
+      "mode": "subagent",
+      "model": "opencode-go/glm-5.1",
+      "temperature": 0.7,
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "bash": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    },
+    "clean-coder": {
+      "description": "TDD-focused clean code agent",
+      "mode": "subagent",
+      "model": "kimi-for-coding/k2p6",
+      "temperature": 0.6,
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "bash": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    },
+    "code-reviewer": {
+      "description": "Code reviewer for quality and security",
+      "mode": "subagent",
+      "model": "kimi-for-coding/k2p6",
+      "temperature": 0.5,
+      "permission": {
+        "read": "allow",
+        "edit": "deny",
+        "write": "deny",
+        "bash": {
+          "*": "ask",
+          "git diff": "allow",
+          "git log*": "allow"
+        },
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    },
+    "beagle": {
+      "description": "Web research and fact-checking agent",
+      "mode": "subagent",
+      "model": "opencode-go/glm-5.1",
+      "temperature": 0.8,
+      "permission": {
+        "read": "allow",
+        "edit": "ask",
+        "write": "ask",
+        "bash": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    },
+    "paper-analyst": {
+      "description": "Scientific paper analysis agent",
+      "mode": "subagent",
+      "model": "opencode-go/deepseek-v4-pro",
+      "temperature": 0.7,
+      "permission": {
+        "read": "allow",
+        "edit": "ask",
+        "write": "ask",
+        "bash": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    },
+    "researcher": {
+      "description": "Deep literature research agent",
+      "mode": "subagent",
+      "model": "kimi-for-coding/k2p6",
+      "temperature": 0.8,
+      "permission": {
+        "read": "allow",
+        "edit": "ask",
+        "write": "ask",
+        "bash": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    },
+    "architect": {
+      "description": "Solution architecture and complexity assessment",
+      "mode": "subagent",
+      "model": "opencode-go/glm-5",
+      "temperature": 0.8,
+      "permission": {
+        "read": "allow",
+        "edit": "deny",
+        "write": "deny",
+        "bash": {
+          "*": "ask",
+          "git diff": "allow",
+          "git log*": "allow",
+          "find *": "allow"
+        },
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    },
+    "writer": {
+      "description": "Expert writer for narrative and explanatory content",
+      "mode": "subagent",
+      "model": "opencode-go/glm-5",
+      "temperature": 1.0,
+      "permission": {
+        "read": "allow",
+        "edit": "ask",
+        "write": "ask",
+        "bash": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    },
+    "data-scientist": {
+      "description": "Data analysis and visualization agent",
+      "mode": "subagent",
+      "model": "opencode-go/qwen3.6-plus",
+      "temperature": 0.7,
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "bash": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "task": "allow",
+        "lsp": "allow",
+        "skill": "allow",
+        "question": "allow"
+      }
+    }
+  },
+  "mcp": {
+    "lsp": {
+      "type": "local",
+      "command": [
+        "agent-lsp",
+        "go:gopls",
+        "typescript:typescript-language-server,--stdio",
+        "python:pyright-langserver,--stdio",
+        "rust:rust-analyzer",
+        "c:clangd",
+        "cpp:clangd"
+      ]
+    },
+    "google-search": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@mcp-server/google-search-mcp@latest"
+      ]
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "enabled": true
+    },
+    "fetch": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "mcp-server-fetch"
+      ],
+      "enabled": true
+    },
+    "aidex": {
+      "type": "local",
+      "command": [
+        "aidex"
+      ]
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "jupyter": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "jupyter-mcp-server@latest"
+      ]
+    },
+    "webresearch": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@mzxrai/mcp-webresearch@latest"
+      ]
+    },
+    "github": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ]
+    },
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem"
+      ]
+    },
+    "sqlite": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "mcp-server-sqlite"
+      ]
+    }
+  }
+}

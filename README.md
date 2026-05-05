@@ -1,278 +1,269 @@
-<p align="center">
-  <a href="README.md">🇷🇺 Русский</a> · <a href="README.en.md">🇬🇧 English</a> · <a href="README.zh.md">🇨🇳 中文</a>
-</p>
+# OpenCode Agents - Research & Clean Code Suite
 
-# OpenCode Agents
+A comprehensive agent configuration for [OpenCode](https://opencode.ai) optimized for scientific research, clean code development, and literature analysis.
 
-Все модели писались и тестировались из расчёта на GLM4.6/GLM4.7
-
-В особенности под Coding Plan подписку без ограничений на токены.
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/veschin/opencode-agents/refs/heads/main/logo.svg" width="512" alt="OpenCode Agents Logo">
-</p>
-
-<p align="center">
-  <em>"Репозиторий с .md-файлами... но каждый файл — это нейродегенерат."</em>
-</p>
-
----
-
-## Установка
-
-**Linux/macOS:**
+## Quick Start
 
 ```bash
-# Создаём директорию агентов
-mkdir -p ~/.config/opencode/agent/
+# Full installation
+make all
 
-# Загружаем только файлы агентов через GitHub API
-curl -s "https://api.github.com/repos/veschin/opencode-agents/contents" | \
-  jq -r '.[] | select(.name | startswith("_") and endswith(".md")) | "\(.name)\t\(.download_url)"' | \
-  while IFS=$'\t' read -r name url; do curl -s "$url" -o ~/.config/opencode/agent/"$name"; done
+# Or step by step
+make setup    # Initialize submodule and directories
+make skills   # Parse and clone skill repositories
+make agents   # Deploy agent configurations
+make deploy   # Deploy main configuration
 ```
 
-*Требуется jq для обработки JSON. Установите через `sudo apt install jq` (Ubuntu/Debian), `brew install jq` (macOS), или `pacman -S jq` (Arch).*
+## Prerequisites
 
-**Windows (PowerShell):**
+- [OpenCode](https://opencode.ai) installed
+- Git
+- Python 3.8+ (for skill parsing)
+- API keys (see `.env.example`)
 
-```powershell
-# Создаём директорию агентов
-$agentDir = Join-Path $env:USERPROFILE ".config\opencode\agent"
-if (-not (Test-Path $agentDir)) {
-    New-Item -ItemType Directory -Path $agentDir -Force | Out-Null
-}
+## Model Providers
 
-# Загружаем только файлы агентов через GitHub API
-$response = Invoke-RestMethod -Uri "https://api.github.com/repos/veschin/opencode-agents/contents"
-$response | Where-Object { $_.name -like '_*.md' } | ForEach-Object {
-    $content = Invoke-RestMethod -Uri $_.download_url
-    $path = Join-Path $agentDir $_.name
-    $content | Out-File -FilePath $path -Encoding UTF8
-    Write-Host "Downloading $($_.name)..."
-}
+This configuration uses multiple model providers:
+
+| Provider | Models | API Key |
+|----------|--------|---------|
+| **OpenCodeGo** | GLM-5, GLM-5.1, Kimi K2.5/2.6, MiMo, MiniMax, Qwen, DeepSeek | `OPENAI_API_KEY` |
+| **Moonshot AI** | Kimi K2.6, Kimi K2.5 (direct) | `MOONSHOT_API_KEY` |
+
+## Agents
+
+### Primary Agents (Tab to switch)
+
+| Agent | Description | Model | Temperature |
+|-------|-------------|-------|-------------|
+| **build** | Full development with all tools | GLM-5.1 | 0.7 |
+| **research** | Literature research & paper analysis | Kimi K2.6 | 0.8 |
+| **plan** | Analysis & planning (no changes) | GLM-5 | 0.1 |
+
+### Subagents (@ to invoke)
+
+| Agent | Description | Model | Temperature |
+|-------|-------------|-------|-------------|
+| **coder** | Complex programming tasks | GLM-5.1 | 0.7 |
+| **clean-coder** | TDD-focused clean code | Kimi K2.6 | 0.6 |
+| **code-reviewer** | Quality & security review | Kimi K2.6 | 0.5 |
+| **beagle** | Web research & fact-checking | GLM-5.1 | 0.8 |
+| **paper-analyst** | Download & analyze papers | DeepSeek V4 Pro | 0.7 |
+| **researcher** | Deep literature research | Kimi K2.6 | 0.8 |
+| **architect** | Solution architecture | GLM-5 | 0.8 |
+| **writer** | Multilingual writing | GLM-5 | 1.0 |
+| **data-scientist** | Data analysis & visualization | Qwen 3.6 Plus | 0.7 |
+
+## Agent Orchestration
+
+Primary agents can delegate to subagents:
+
+- **build** → `clean-coder`, `code-reviewer`, `beagle`, `architect`, `writer`
+- **research** → `beagle`, `paper-analyst`, `researcher`, `data-scientist`, `writer`
+- **plan** → `architect`, `beagle`
+
+## MCP Servers
+
+| MCP | Purpose |
+|-----|---------|
+| **lsp** | Language server protocol (Python, Go, Rust, TypeScript, C/C++) |
+| **google-search** | Web search capabilities |
+| **sequential-thinking** | Structured reasoning |
+| **fetch** | Web content fetching |
+| **aidex** | Code indexing and search |
+| **context7** | Documentation search |
+| **jupyter** | Jupyter notebook integration |
+| **webresearch** | Advanced web research |
+| **github** | Repository management |
+| **filesystem** | Enhanced file operations |
+| **sqlite** | Database queries |
+
+## Skills
+
+Skills are automatically parsed from [awesome-agent-skills](https://github.com/kodustech/awesome-agent-skills) and integrated with your existing `~/.claude/skills/`.
+
+### Skill Categories
+
+- Frontend Development
+- Backend Development
+- DevOps
+- Testing & QA
+- Security
+- Observability
+- Performance
+- Mobile Development
+- Blockchain
+- Infrastructure
+- Data Science
+- AI/ML
+- Tooling
+- Code Review
+
+### Skill Registry
+
+After running `make skills`, a searchable registry is created at:
+```
+~/.config/opencode/skills/registry.json
 ```
 
+## Configuration
+
+### Environment Variables
+
+Copy `.env.example` to `~/.config/opencode/.env` and configure:
+
+```bash
+# Required
+OPENAI_API_KEY=your-opencodego-key
+MOONSHOT_API_KEY=your-moonshot-key
+
+# Optional
+GITHUB_TOKEN=your-github-token
+GOOGLE_API_KEY=your-google-key
+PERPLEXITY_API_KEY=your-perplexity-key
+```
+
+### Agent Configuration
+
+Agents are defined in markdown files with YAML frontmatter:
+
+```markdown
+---
+description: Agent description
+mode: primary|subagent
+model: provider/model-id
+temperature: 0.7
+permission:
+  read: allow
+  edit: allow
+  bash: allow
 ---
 
-## Changelog
+Agent instructions here...
+```
 
-### _beagle → _beagle_v2
-- Полный редизайн алгоритма исследования
-- Новая система уровней достоверности (Sci/Prof/Pers)
-- Добавлен 10-шаговый алгоритм мышления с рекурсивным поиском
-- Новый формат вывода: оценка покрытия, области для исследования, содержание, детали элементов
-- Строгая фильтрация: SEO-спам, AI-фермы, устаревший контент — отклоняются
-- Обработка edge-технологий для зрелых и emerging областей
-- Перекрёстная проверка ключевых утверждений по разным источникам
+## Commands
 
-### _writer — Редизайн
-- Добавлен полный список запрещённых паттернов (отрицания, клише, рекламный язык, обращение к читателю, итоги)
-- Новые рекомендации по стилю: лаконичность (<10 предложений), естественный поток, объединённые предложения
-- Обновлены правила форматирования: заголовки как вопросы, маркированные списки для 3+ элементов, без italic
-- Добавлена автооценка по 10 критериям
-- Глубокий внутренний монолог (10+ само-вопросов) перед написанием
-- Фазы планирования структуры и аутлайна текста
+```bash
+make all        # Full setup and deployment
+make setup      # Initialize submodule and directories
+make skills     # Parse and clone skills
+make agents     # Deploy agents
+make deploy     # Deploy configuration
+make install    # Full installation with next steps
+make test       # Validate configuration
+make clean      # Remove deployed configs
+make update     # Update awesome-agent-skills submodule
+make help       # Show all targets
+```
 
----
+## Project Structure
 
-## Агенты
+```
+opencode-agents/
+├── Makefile                          # Main orchestrator
+├── README.md                         # This file
+├── .env.example                      # API key template
+├── .gitmodules                       # Git submodule config
+├── awesome-agent-skills/             # Git submodule (skills list)
+├── agents/                           # Agent definitions
+│   ├── build.md                      # Primary: Development
+│   ├── research.md                   # Primary: Research
+│   ├── plan.md                       # Primary: Planning
+│   ├── coder.md                      # Subagent: Coding
+│   ├── clean-coder.md                # Subagent: TDD
+│   ├── code-reviewer.md              # Subagent: Review
+│   ├── beagle.md                     # Subagent: Research
+│   ├── paper-analyst.md              # Subagent: Papers
+│   ├── researcher.md                 # Subagent: Literature
+│   ├── architect.md                  # Subagent: Architecture
+│   ├── writer.md                     # Subagent: Writing
+│   └── data-scientist.md             # Subagent: Data Science
+├── config/
+│   └── opencode.json                 # Main configuration
+└── scripts/
+    ├── setup-skills.sh               # Parse & clone skills
+    └── deploy.sh                     # Deploy configs
+```
 
-- [_arch — Senior Solution Architect](#_arch--senior-solution-architect)
-- [_beagle_v2 — Research Agent](#_beagle_v2--research-agent)
-- [_coder — Autonomous Coding Agent](#_coder--autonomous-coding-agent)
-- [_writer — Expert Writer for Multilingual Text Generation](#_writer--expert-writer-for-multilingual-text-generation)
+## Usage Examples
 
----
+### Switch to Research Agent
+Press `Tab` to cycle through primary agents, or:
+```
+@research
+```
 
-## _arch — Senior Solution Architect
+### Invoke Subagent
+```
+@paper-analyst analyze https://arxiv.org/abs/2401.12345
+```
 
-> Хороший агент если нет опыта в System Design. Нельзя верить ему полностью, но даёт хороший референс как разбивать задачи и какие есть белые пятна.
+### Research Workflow
+```
+# Start research agent
+@research
 
-Старший архитектор решений. Оценивает сложность задач по четырём фреймворкам и режет проекты на фазы без простоя.
+# Ask to find papers
+Find recent papers on transformer architectures
 
-**Основные фреймворки:**
-- WBS — структура работ, только минимальные сценарии
-- UCP — очки использования сценариев, только базовые кейсы
-- T-shirt sizing — размеры от XS (1-3 балла) до XL (21+ баллов)
-- Function Points — только важные функции
+# Delegate to paper analyst
+@paper-analyst analyze the top 3 papers
 
-**Фильтр Bare Minimum:**
-- Нужно для MVP? (Да/Нет)
-- Нельзя реализовать как улучшение после MVP? (Да/Нет)
-- Требует архитектурного решения сейчас или можно отложить? (Да/Нет)
-- Если опустить — заблокирует базовую функциональность? (Да/Нет)
+# Get code examples
+@coder implement the approach from paper #2
+```
 
-**Формат задач в JIRA:**
-- ID с порядковой нумерацией
-- Приоритет: критический/высокий/средний/низкий
-- Story points для планирования нагрузки
-- Спринт по фазе проекта
-- Готов к продакшену, есть стратегия отката
-- Нулевой простой при внедрении
-- Метрики мониторинга и пороги алертов
+### Coding Workflow
+```
+# Start build agent (default)
 
-**Методы деплоя:**
-- Feature flags — фичи включаются по флагу
-- Canary rollout — 5% → 25% → 100% с мониторингом
-- Blue-green — развёртывание в зелёное окружение → переключение трафика
-- Shadow mode — теневая обработка для сравнения результатов
-- Strangler pattern — постепенная замена легаси
-- Dark launch — полный деплой с захватом трафика, потом включение для пользователей
+# Write feature
+Implement a caching layer for the API
 
----
+# Get review
+@code-reviewer review the changes
 
-## _beagle_v2 — Research Agent
+# Refactor
+@clean-coder refactor for testability
+```
 
-> Вторая мажорная версия. Теперь это очень серьёзный агент для поиска информации который не отвечает сразу, но формирует какой-то временный контекст. По которому сразу можно задавать вопросы и уточнять рекурсивные поиски. Новая система авторитетности, скоринга, фильтрации и ранжирования - просто отличная.
+## Updating
 
-Агент для исследовательской работы. Не отвечает на вопросы, а копается в источниках и собирает факты.
+Update the awesome-agent-skills submodule:
+```bash
+make update
+make skills
+```
 
-**Принципы:**
-- Исследуй, не отвечай прямо
-- Честность важнее полноты: если нет данных — так и напиши
-- Только подтверждённые из разных источников факты
-- Качество важнее количества
-- Глубина плюс интерактивность
+## Troubleshooting
 
-**Уровни источников:**
-- **Sci**: рецензируемые статьи, arxiv.org, публикации
-- **Prof**: официальная документация, Arch Wiki, Phoronix, LWN, авторитетные техсайты
-- **Pers**: GitHub репозитории, блоги разработчиков, обсуждения на Reddit
+### Agents not loading
+1. Check `~/.config/opencode/agents/` exists
+2. Verify markdown files have proper frontmatter (starts with `---`)
+3. Run `make test` to validate
 
-**Алгоритм работы:**
-1. Разобрать запрос и понять — зрелая область или emerging
-2. Разбить на подтемы с иерархией: критичные → важные → полезные → опциональные
-3. Составить поисковые запросы с операторами и таргетингом по уровням
-4. Фильтровать результаты: отклонять SEO-спам, AI-фермы, устаревший контент
-5. Извлекать только факты, технические утверждения, данные бенчмарков, прямые цитаты
-6. Оценить уверенность: 100%/90%/70%/50%
-7. Для edge-технологий — фокус на свежем, для зрелых — на проверенном
-8. Перекрёстно проверить ключевые утверждения
-9. Рекурсивно искать пока не будет полного покрытия
-10. Оценить покрытие перед выводом
+### MCP not connecting
+1. Check if MCP command is installed: `which npx`, `which uvx`
+2. Verify API keys in `~/.config/opencode/.env`
+3. Check opencode logs for errors
 
-**Формат вывода:**
-1. Оценка покрытия с уверенностью по подтемам
-2. Что ещё можно исследовать
-3. Содержание
-4. Детали с подтверждёнными фактами
+### Skills not found
+1. Run `make skills` to parse and clone
+2. Check `~/.config/opencode/skills/registry.json`
+3. Verify Python 3.8+ is installed
 
-**Что запрещено:**
-- Инструкции по установке (pip install, apt-get, docker)
-- Примеры использования (сниппеты кода, import statements)
-- Туториалы и how-to руководства
-- Субъективные оценки ("отличный инструмент", "мощный")
-- Маркетинговый язык
-- Таблицы в Markdown или ASCII
+## Contributing
 
----
+This is a personal configuration optimized for:
+- Scientific literature research
+- Clean code development (Python, Rust, Go)
+- Paper analysis and downloading
+- Data science workflows
 
-## _coder — Autonomous Coding Agent
+Feel free to adapt the agents and models to your needs!
 
-> Самый нестабильный агент. Иногда круто что он сам делает TDD, сам ревьюит и коммитит, но чаще всего наследует все проблемы LLM и больше вредит чем помогает. И всё таки я выбираю использовать его, чем не использовать.
+## License
 
-Старший разработчик с глубоким анализом перед любым действием.
-
-**Процесс работы:**
-- **Фаза 1 — Discovery (20%)**: понять требования, прочитать кодовую базу, найти ограничения
-- **Фаза 2 — Deep Analysis (70%)**: 6-слойный рекурсивный анализ
-- **Фаза 3 — Atomic Implementation (10%)**: TDD для каждой атомарной задачи
-- **Фаза 4 — Paranoid Review**: исчерпывающее тестирование и проверка глазами пользователя
-
-**6 слоёв рекурсивного анализа:**
-
-**Слой 1: Понимание**
-- Что именно нужно получить
-- Ограничения: критично/важно/желательно
-- Контекст: существующая кодовая база, зависимости, где это будет использоваться
-
-**Слой 2: Декомпозиция**
-- На какие подзадачи разбить
-- Технические, бизнес, интеграционные ограничения
-- МИНИМАЛЬНАЯ жизнеспособная подзадача для старта
-
-**Слой 3: Поиск решений**
-- 3-5 разных подходов с плюсами/минусами/сложностью
-- Оценка компромиссов: корректность, сложность, производительность, надёжность, интеграция, тестируемость
-- Почему выбран конкретный подход, какие риски
-
-**Слой 4: Анализ сбоев**
-- Все крайние случаи: ввод, состояние, интеграция, пользовательские сценарии
-- Пустые значения, границы, переполнение, некорректные данные, конкурентность, race conditions
-
-**Слой 5: План проверки**
-- Какие тесты нужны: happy path, sad paths, крайние случаи, интеграция
-- Как это будет выглядеть с точки зрения пользователя
-
-**Слой 6: Оценка рисков**
-- Технические, бизнес, безопасность, производительность
-- Вероятность, влияние, как минимизировать
-
-**Атомарный TDD:**
-1. Определить атом (разбивать пока не станет совсем маленьким)
-2. Написать тест поведения ПЕРВЫМ
-3. Реализовать МИНИМАЛЬНЫЙ код чтобы тест прошёл
-4. Запустить тест и убедиться что он проходит (не верить на слово)
-5. Проверить глазами пользователя — устроит ли такое решение
-6. Закоммитить только этот атом (нельзя батчить коммиты)
-7. Обновить todo
-
-**Качество кода:**
-- Сразу готов для продакшена (без TODO и заглушек)
-- Типы у всех функций
-- Публичные API задокументированы
-- Понятные сообщения об ошибках
-- Без magic numbers, без дублирования
-- Валидация ввода на всех публичных функциях
-
----
-
-## _writer — Expert Writer for Multilingual Text Generation
-
-> Задизайнен для многоступенчатого мышления. Если LLM слушается, то реально сильно улучшает текст. Основная польза это структура и посыл, стилизацию нужно дорабатывать человеку.
-
-Эксперт-писатель с нарративной системой и строгими правилами качества.
-
-**Критические правила:**
-- ВСЁ мышление на английском
-- ВСЁ написание на целевом языке (писать с нуля, НЕ переводить)
-- Итерировать пока ВСЕ проверки пройдут
-
-**Запрещённые паттерны:**
-- Отрицания для определения ("это не X, а Y")
-- Открытые клише ("это не просто Y", "отнюдь не только")
-- Рекламный язык ("играет важную роль", "стандартом de facto", "ощущается как")
-- Смешанные языки (английские слова в русском тексте, кроме терминов)
-- Редакторские вставки ("важно отметить", "нельзя не упомянуть")
-- Обращение к читателю ("вы", "тебя", "представьте")
-- Итоги ("В заключение", "всё вышесказанное")
-- Разговорные вставки ("надеюсь, это поможет", "всё готово")
-
-**Стиль текста:**
-- Лаконичный: <10 предложений если не сказано иначе
-- Каждое слово на месте, ничего лишнего
-- Богатый смыслом, не многословный, но и не сухой
-- Естественный поток с логическими связками
-- Объединённые предложения, а не разрозненные фразы
-
-**Форматирование:**
-- Заголовки как вопросы ("Какова основная философия?")
-- Bold/underline для акцента
-- Без italic
-- Без длинных тире (— и –)
-- Маркированные списки для 3+ элементов
-- Блоки кода только для технического контента
-
-**Алгоритм:**
-1. Создать todos
-2. Разобрать запрос (извлечь все ограничения)
-3. Глубокий внутренний монолог (10+ вопросов к себе)
-4. План структуры (разделы и фокус)
-5. План текста (тема, основная мысль, как развивается)
-6. Генерация текста (писать на целевом языке)
-7. Автооценка (10 критериев: запрещённые паттерны, повторы, лаконичность, читаемость, глубина смысла, точность, связность параграфов, связность текста, форматирование, разнообразие)
-
-**Автооценка:**
-- Если ЛЮБОЕ = FALSE → найти проблему → перегенерировать → переоценить → повторять пока ВСЕ = TRUE
-- Если ВСЕ = TRUE → ГОТОВО
+MIT - See LICENSE file for details
