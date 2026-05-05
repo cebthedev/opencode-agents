@@ -363,6 +363,7 @@
   "plugin": [
     "opencode-auto-fallback",
     "@zenobius/opencode-skillful",
-    "oh-my-opencode-slim"
+    "oh-my-opencode-slim",
+    "opencode-plugin-openspec"
   ]
 }
