@@ -100,6 +100,29 @@ Skills are automatically parsed from [awesome-agent-skills](https://github.com/k
 - Tooling
 - Code Review
 
+### Additional Skills
+
+The following local skill directories are also included:
+
+**~/.agents/skills/** (20+ skills)
+- content-humanizer
+- architecture-decision-records
+- drawio-diagrams-enhanced
+- humanizer
+- openspec-* (OpenSpec workflow skills)
+- pdf-to-markdown
+- python-design-patterns
+- python-qa
+- software-architecture
+- tessl__deep-research
+
+**~/.claude/skills/** (189+ skills)
+- Scientific computing (bioinformatics, chemistry, astronomy)
+- Data analysis (pandas, polars, dask)
+- Machine learning (scikit-learn, pytorch, transformers)
+- Visualization (matplotlib, seaborn, plotly)
+- And many more...
+
 ### Skill Registry
 
 After running `make skills`, a searchable registry is created at:

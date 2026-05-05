@@ -160,6 +160,20 @@ if os.path.exists(claude_skills):
             }
             registry["skills"].append(skill_entry)
 
+# Also add existing ~/.agents/skills/
+agents_skills = os.path.expanduser("~/.agents/skills")
+if os.path.exists(agents_skills):
+    for item in os.listdir(agents_skills):
+        item_path = os.path.join(agents_skills, item)
+        if os.path.isdir(item_path) and not item.startswith('.'):
+            skill_entry = {
+                "name": item,
+                "path": os.path.join("~/.agents/skills", item),
+                "source": "agents-skills",
+                "type": "local"
+            }
+            registry["skills"].append(skill_entry)
+
 registry["total_count"] = len(registry["skills"])
 
 # Save registry
