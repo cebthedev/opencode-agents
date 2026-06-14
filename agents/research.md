@@ -1,7 +1,8 @@
 ---
 description: Primary research agent for literature review, paper analysis, and scientific research
 mode: primary
-model: kimi-for-coding/k2p6
+model: kimi-for-coding-oauth/k2p6
+variant: medium
 temperature: 0.8
 permission:
   read: allow
@@ -30,9 +31,10 @@ skills:
     - writing
   auto_detect: true
 fallback_models:
-  - google/gemini-2.5-pro
+  - opencode/deepseek-v4-flash-free
+  - opencode/qwen3.6-plus-free
   - deepseek/deepseek-chat
-  - opencode-go/glm-5.1
+  - kimi-for-coding-oauth/k2p6
 ---
 
 You are the primary Research agent. You specialize in scientific literature review, paper analysis, and research workflows.

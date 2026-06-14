@@ -6,8 +6,6 @@
       "~/.local/share/opencode/tool-output/*": "allow",
       "~/.config/opencode/lazy-skills/*": "allow",
       "~/.config/opencode/skills/*": "allow",
-      "~/.claude/skills/*": "allow",
-      "~/.agents/skills/*": "allow",
       "/tmp/opencode/*": "allow",
       "*/tmp/opencode/*": "allow"
     }
@@ -16,7 +14,7 @@
     "build": {
       "description": "Primary development agent with full tool access",
       "mode": "primary",
-      "model": "kimi-for-coding/k2p6",
+      "model": "kimi-for-coding-oauth/k2p6",
       "temperature": 0.6,
       "permission": {
         "read": "allow",
@@ -33,12 +31,13 @@
         "skill": "allow",
         "question": "allow"
       },
-      "color": "#4CAF50"
+      "color": "#4CAF50",
+      "variant": "medium"
     },
     "research": {
       "description": "Primary research agent for literature and scientific analysis",
       "mode": "primary",
-      "model": "kimi-for-coding/k2p6",
+      "model": "kimi-for-coding-oauth/k2p6",
       "temperature": 0.8,
       "permission": {
         "read": "allow",
@@ -55,12 +54,13 @@
         "skill": "allow",
         "question": "allow"
       },
-      "color": "#2196F3"
+      "color": "#2196F3",
+      "variant": "medium"
     },
     "plan": {
       "description": "Planning agent for analysis without making changes",
       "mode": "primary",
-      "model": "google/gemini-2.5-pro",
+      "model": "kimi-for-coding-oauth/k2p6",
       "temperature": 0.1,
       "permission": {
         "read": "allow",
@@ -83,12 +83,13 @@
         "skill": "allow",
         "question": "allow"
       },
-      "color": "#FF9800"
+      "color": "#FF9800",
+      "variant": "high"
     },
     "coder": {
       "description": "Autonomous coding agent for complex programming tasks",
       "mode": "subagent",
-      "model": "kimi-for-coding/k2p6",
+      "model": "kimi-for-coding-oauth/k2p6",
       "temperature": 0.7,
       "permission": {
         "read": "allow",
@@ -102,12 +103,13 @@
         "lsp": "allow",
         "skill": "allow",
         "question": "allow"
-      }
+      },
+      "variant": "medium"
     },
     "clean-coder": {
       "description": "TDD-focused clean code agent",
       "mode": "subagent",
-      "model": "kimi-for-coding/k2p6",
+      "model": "kimi-for-coding-oauth/k2p6",
       "temperature": 0.6,
       "permission": {
         "read": "allow",
@@ -121,12 +123,13 @@
         "lsp": "allow",
         "skill": "allow",
         "question": "allow"
-      }
+      },
+      "variant": "medium"
     },
     "code-reviewer": {
       "description": "Code reviewer for quality and security",
       "mode": "subagent",
-      "model": "kimi-for-coding/k2p6",
+      "model": "kimi-for-coding-oauth/k2p6",
       "temperature": 0.5,
       "permission": {
         "read": "allow",
@@ -143,12 +146,13 @@
         "lsp": "allow",
         "skill": "allow",
         "question": "allow"
-      }
+      },
+      "variant": "high"
     },
     "beagle": {
       "description": "Web research and fact-checking agent",
       "mode": "subagent",
-      "model": "google/gemini-2.5-flash",
+        "model": "opencode/mimo-v2.5-free",
       "temperature": 0.8,
       "permission": {
         "read": "allow",
@@ -190,7 +194,7 @@
     "researcher": {
       "description": "Deep literature research agent",
       "mode": "subagent",
-      "model": "kimi-for-coding/k2p6",
+      "model": "kimi-for-coding-oauth/k2p6",
       "temperature": 0.8,
       "permission": {
         "read": "allow",
@@ -206,12 +210,13 @@
         "lsp": "allow",
         "skill": "allow",
         "question": "allow"
-      }
+      },
+      "variant": "high"
     },
     "architect": {
       "description": "Solution architecture and complexity assessment",
       "mode": "subagent",
-      "model": "google/gemini-2.5-pro",
+        "model": "deepseek/deepseek-reasoner",
       "temperature": 0.8,
       "permission": {
         "read": "allow",
@@ -234,7 +239,7 @@
     "writer": {
       "description": "Expert writer for narrative and explanatory content",
       "mode": "subagent",
-      "model": "google/gemini-2.5-pro",
+      "model": "kimi-for-coding-oauth/k2p6",
       "temperature": 1.0,
       "permission": {
         "read": "allow",
@@ -360,10 +365,252 @@
       ]
     }
   },
+  "provider": {
+    "kimi-for-coding-oauth": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Kimi For Coding (OAuth)",
+      "options": {
+        "baseURL": "https://api.kimi.com/coding/v1"
+      },
+      "models": {
+        "k2p6": {
+          "name": "Kimi-k2.6",
+          "reasoning": true,
+          "options": {},
+          "variants": {
+            "off": {
+              "reasoning_effort": "off"
+            },
+            "auto": {
+              "reasoning_effort": "auto"
+            },
+            "low": {
+              "reasoning_effort": "low"
+            },
+            "medium": {
+              "reasoning_effort": "medium"
+            },
+            "high": {
+              "reasoning_effort": "high"
+            }
+          },
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "k2p5": {
+          "name": "Kimi-k2.5",
+          "reasoning": true,
+          "options": {},
+          "variants": {
+            "off": {
+              "reasoning_effort": "off"
+            },
+            "auto": {
+              "reasoning_effort": "auto"
+            },
+            "low": {
+              "reasoning_effort": "low"
+            },
+            "medium": {
+              "reasoning_effort": "medium"
+            },
+            "high": {
+              "reasoning_effort": "high"
+            }
+          },
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        }
+      }
+    },
+    "opencode": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenCode Free",
+      "options": {
+        "baseURL": "https://opencode.ai/zen/go/v1",
+        "apiKey": "${OPENAI_API_KEY}"
+      },
+      "models": {
+        "deepseek-v4-flash-free": {
+          "name": "DeepSeek-V4-Flash-Free",
+          "reasoning": false,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "mimo-v2.5-free": {
+          "name": "MiMo-V2.5-Free",
+          "reasoning": false,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "qwen3.6-plus-free": {
+          "name": "Qwen-3.6-Plus-Free",
+          "reasoning": true,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "north-mini-code-free": {
+          "name": "North-Mini-Code-Free",
+          "reasoning": false,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "nemotron-3-ultra-free": {
+          "name": "Nemotron-3-Ultra-Free",
+          "reasoning": true,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "minimax-m3-free": {
+          "name": "MiniMax-M3-Free",
+          "reasoning": false,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "big-pickle": {
+          "name": "Big-Pickle",
+          "reasoning": false,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        }
+      }
+    },
+    "deepseek": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DeepSeek",
+      "options": {
+        "baseURL": "https://api.deepseek.com",
+        "apiKey": "${DEEPSEEK_API_KEY}"
+      },
+      "models": {
+        "deepseek-chat": {
+          "name": "DeepSeek Chat",
+          "reasoning": true,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "deepseek-reasoner": {
+          "name": "DeepSeek Reasoner",
+          "reasoning": true,
+          "options": {},
+          "variants": {},
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        }
+      }
+    }
+  },
   "plugin": [
     "opencode-auto-fallback",
     "@zenobius/opencode-skillful",
     "oh-my-opencode-slim",
-    "opencode-plugin-openspec"
+    "opencode-plugin-openspec",
+    "opencode-kimi-full"
   ]
 }

@@ -27,9 +27,9 @@ skills:
     - research
   auto_detect: true
 fallback_models:
-  - google/gemini-2.5-pro
-  - opencode-go/qwen3.6-plus
-  - kimi-for-coding/k2p6
+  - opencode/deepseek-v4-flash-free
+  - deepseek/deepseek-chat
+  - kimi-for-coding-oauth/k2p6
 ---
 
 You are a Data Scientist specializing in data analysis, visualization, and statistical modeling.

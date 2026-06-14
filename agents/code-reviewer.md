@@ -1,7 +1,8 @@
 ---
 description: Code reviewer for quality, security, and best practices
 mode: subagent
-model: kimi-for-coding/k2p6
+model: kimi-for-coding-oauth/k2p6
+variant: high
 temperature: 0.5
 permission:
   read: allow
@@ -26,8 +27,10 @@ skills:
     - coding
   auto_detect: true
 fallback_models:
-  - opencode-go/glm-5.1
-  - google/gemini-2.5-pro
+  - opencode/deepseek-v4-flash-free
+  - opencode/qwen3.6-plus-free
+  - deepseek/deepseek-chat
+  - kimi-for-coding-oauth/k2p6
 ---
 
 You are a Code Reviewer focused on quality, security, and maintainability.

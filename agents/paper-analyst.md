@@ -28,9 +28,9 @@ skills:
     - bioinformatics
   auto_detect: true
 fallback_models:
-  - kimi-for-coding/k2p6
-  - google/gemini-2.5-pro
-  - opencode-go/deepseek-v4-pro
+  - opencode/deepseek-v4-flash-free
+  - deepseek/deepseek-chat
+  - kimi-for-coding-oauth/k2p6
 ---
 
 You are a Paper Analyst specializing in scientific literature analysis.

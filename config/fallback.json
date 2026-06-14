@@ -2,86 +2,142 @@
   "$schema": "https://raw.githubusercontent.com/HyeokjaeLee/opencode-auto-fallback/main/docs/fallback.schema.json",
   "enabled": true,
   "defaultFallback": [
-    "kimi-for-coding/k2p6",
-    "google/gemini-2.5-pro",
-    "deepseek/deepseek-chat",
-    "opencode-go/glm-5.1"
+    { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+    { "model": "opencode/mimo-v2.5-free", "variant": "medium" },
+    { "model": "opencode/qwen3.6-plus-free", "variant": "medium" },
+    { "model": "deepseek/deepseek-chat", "variant": "medium" },
+    { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" },
+    { "model": "kimi-for-coding-oauth/k2p6", "variant": "off" },
+    { "model": "kimi-for-coding-oauth/k2p5", "variant": "medium" }
   ],
-  "agentFallbacks": {
-    "build": [
-      "kimi-for-coding/k2p6",
-      "google/gemini-2.5-pro",
-      "deepseek/deepseek-chat",
-      "opencode-go/glm-5.1"
-    ],
-    "coder": [
-      "kimi-for-coding/k2p6",
-      "google/gemini-2.5-pro",
-      "deepseek/deepseek-chat",
-      "opencode-go/glm-5.1"
-    ],
-    "plan": [
-      "google/gemini-2.5-pro",
-      "deepseek/deepseek-reasoner",
-      "opencode-go/glm-5",
-      "kimi-for-coding/k2p6"
-    ],
-    "research": [
-      "kimi-for-coding/k2p6",
-      "google/gemini-2.5-pro",
-      "deepseek/deepseek-chat",
-      "opencode-go/glm-5.1"
-    ],
-    "clean-coder": [
-      "kimi-for-coding/k2p6",
-      "opencode-go/glm-5.1",
-      "google/gemini-2.5-pro"
-    ],
-    "code-reviewer": [
-      "kimi-for-coding/k2p6",
-      "opencode-go/glm-5.1",
-      "google/gemini-2.5-pro"
-    ],
-    "beagle": [
-      "google/gemini-2.5-flash",
-      "kimi-for-coding/k2p6",
-      "opencode-go/glm-5.1"
-    ],
-    "paper-analyst": [
-      "deepseek/deepseek-chat",
-      "kimi-for-coding/k2p6",
-      "google/gemini-2.5-pro",
-      "opencode-go/deepseek-v4-pro"
-    ],
-    "researcher": [
-      "kimi-for-coding/k2p6",
-      "google/gemini-2.5-pro",
-      "deepseek/deepseek-chat"
-    ],
-    "architect": [
-      "google/gemini-2.5-pro",
-      "deepseek/deepseek-reasoner",
-      "opencode-go/glm-5",
-      "kimi-for-coding/k2p6"
-    ],
-    "writer": [
-      "google/gemini-2.5-pro",
-      "opencode-go/glm-5",
-      "kimi-for-coding/k2p6"
-    ],
-    "data-scientist": [
-      "deepseek/deepseek-reasoner",
-      "google/gemini-2.5-pro",
-      "opencode-go/qwen3.6-plus",
-      "kimi-for-coding/k2p6"
-    ]
+  "agents": {
+    "build": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "opencode/qwen3.6-plus-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "off" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "low" }
+      ],
+      "largeContextModel": "deepseek/deepseek-chat",
+      "minContextRatio": 0.2
+    },
+    "coder": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "opencode/qwen3.6-plus-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "off" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "low" }
+      ],
+      "largeContextModel": "deepseek/deepseek-chat",
+      "minContextRatio": 0.2
+    },
+    "clean-coder": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "opencode/qwen3.6-plus-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "off" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "low" }
+      ],
+      "largeContextModel": "deepseek/deepseek-chat",
+      "minContextRatio": 0.2
+    },
+    "research": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "opencode/qwen3.6-plus-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "off" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "low" }
+      ],
+      "largeContextModel": "deepseek/deepseek-chat",
+      "minContextRatio": 0.2
+    },
+    "plan": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "opencode/qwen3.6-plus-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-reasoner", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "high" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "medium" }
+      ]
+    },
+    "code-reviewer": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "opencode/qwen3.6-plus-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "high" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "medium" }
+      ]
+    },
+    "researcher": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "opencode/qwen3.6-plus-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "high" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "medium" }
+      ]
+    },
+    "beagle": {
+      "fallback": [
+        { "model": "opencode/mimo-v2.5-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" }
+      ]
+    },
+    "paper-analyst": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "low" }
+      ],
+      "largeContextModel": "deepseek/deepseek-chat",
+      "minContextRatio": 0.2
+    },
+    "architect": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-reasoner", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "high" }
+      ]
+    },
+    "writer": {
+      "fallback": [
+        { "model": "opencode/mimo-v2.5-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "medium" }
+      ]
+    },
+    "data-scientist": {
+      "fallback": [
+        { "model": "opencode/deepseek-v4-flash-free", "variant": "medium" },
+        { "model": "deepseek/deepseek-chat", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p6", "variant": "medium" },
+        { "model": "kimi-for-coding-oauth/k2p5", "variant": "high" }
+      ]
+    }
   },
-  "largeContextFallback": {
-    "agents": ["build", "coder", "research", "clean-coder", "paper-analyst"],
-    "model": "deepseek/deepseek-chat",
-    "minContextRatio": 0.2
-  },
-  "cooldownMs": 120000,
-  "maxRetries": 3,
+  "cooldownMs": 30000,
+  "maxRetries": 1,
   "logging": true
 }

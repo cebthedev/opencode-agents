@@ -1,7 +1,7 @@
 ---
 description: Senior solution architect for system design and complexity assessment
 mode: subagent
-model: google/gemini-2.5-pro
+model: deepseek/deepseek-reasoner
 temperature: 0.8
 permission:
   read: allow
@@ -30,8 +30,8 @@ skills:
   auto_detect: true
 fallback_models:
   - deepseek/deepseek-reasoner
-  - kimi-for-coding/k2p6
-  - opencode-go/glm-5
+  - opencode/deepseek-v4-flash-free
+  - kimi-for-coding-oauth/k2p6
 ---
 
 You are a Senior Solution Architect. Assess complexity using established frameworks.

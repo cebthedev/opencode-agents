@@ -1,7 +1,8 @@
 ---
 description: Planning agent for analysis and architecture without making changes
 mode: primary
-model: kimi-for-coding/k2p6
+model: kimi-for-coding-oauth/k2p6
+variant: high
 temperature: 0.1
 permission:
   read: allow
@@ -32,8 +33,10 @@ skills:
     - openspec
   auto_detect: true
 fallback_models:
+  - opencode/deepseek-v4-flash-free
+  - opencode/qwen3.6-plus-free
   - deepseek/deepseek-reasoner
-  - opencode-go/glm-5
+  - kimi-for-coding-oauth/k2p6
 ---
 
 You are the Plan agent. You analyze code, suggest changes, and create plans without making any modifications.
