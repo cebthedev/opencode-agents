@@ -53,49 +53,81 @@ deploy_agents() {
     echo -e "${GREEN}Agents deployed successfully!${RESET}"
 }
 
+deploy_json_config() {
+    local src_path="$1"
+    local dst_path="$2"
+    local name="$3"
+
+    python3 "$REPO_DIR/scripts/substitute_env_in_json.py" \
+        --input "$src_path" \
+        --output "$dst_path" \
+        --env "$TARGET_DIR/.env"
+    echo -e "  ${GREEN}Deployed: $name${RESET}"
+
+    # Warn about any unresolved placeholders so missing API keys are obvious.
+    local remaining
+    remaining=$(grep -oE '\$\{[A-Za-z_][A-Za-z0-9_]*\}' "$dst_path" 2>/dev/null | sort -u || true)
+    if [ -n "$remaining" ]; then
+        echo -e "  ${YELLOW}Warning: unresolved placeholders in $name:${RESET}"
+        echo "$remaining" | sed "s/^/    /"
+    fi
+}
+
 deploy_config() {
     echo -e "${BLUE}Deploying configuration...${RESET}"
-    
-    # Copy opencode.json
+
+    # Deploy opencode.json (required)
     if [ -f "$CONFIG_SOURCE/opencode.json" ]; then
-        cp "$CONFIG_SOURCE/opencode.json" "$TARGET_DIR/opencode.json"
-        echo -e "  ${GREEN}Deployed: opencode.json${RESET}"
+        deploy_json_config "$CONFIG_SOURCE/opencode.json" "$TARGET_DIR/opencode.json" "opencode.json"
     else
         echo -e "${RED}Error: opencode.json not found at $CONFIG_SOURCE/opencode.json${RESET}"
         exit 1
     fi
-    
-    # Copy tui.json
+
+    # Deploy tui.json
     if [ -f "$CONFIG_SOURCE/tui.json" ]; then
-        cp "$CONFIG_SOURCE/tui.json" "$TARGET_DIR/tui.json"
-        echo -e "  ${GREEN}Deployed: tui.json${RESET}"
+        deploy_json_config "$CONFIG_SOURCE/tui.json" "$TARGET_DIR/tui.json" "tui.json"
     fi
-    
-    # Copy fallback.json
+
+    # Deploy fallback.json
     if [ -f "$CONFIG_SOURCE/fallback.json" ]; then
-        cp "$CONFIG_SOURCE/fallback.json" "$TARGET_DIR/fallback.json"
-        echo -e "  ${GREEN}Deployed: fallback.json${RESET}"
+        deploy_json_config "$CONFIG_SOURCE/fallback.json" "$TARGET_DIR/fallback.json" "fallback.json"
     fi
-    
-    # Copy oh-my-opencode-slim.json
+
+    # Deploy oh-my-opencode-slim.json
     if [ -f "$CONFIG_SOURCE/oh-my-opencode-slim.json" ]; then
-        cp "$CONFIG_SOURCE/oh-my-opencode-slim.json" "$TARGET_DIR/oh-my-opencode-slim.json"
-        echo -e "  ${GREEN}Deployed: oh-my-opencode-slim.json${RESET}"
+        deploy_json_config "$CONFIG_SOURCE/oh-my-opencode-slim.json" "$TARGET_DIR/oh-my-opencode-slim.json" "oh-my-opencode-slim.json"
     fi
-    
-    # Copy lazy.config.json
+
+    # Deploy lazy.config.json
     if [ -f "$REPO_DIR/lazy.config.json" ]; then
-        cp "$REPO_DIR/lazy.config.json" "$TARGET_DIR/lazy.config.json"
-        echo -e "  ${GREEN}Deployed: lazy.config.json${RESET}"
+        deploy_json_config "$REPO_DIR/lazy.config.json" "$TARGET_DIR/lazy.config.json" "lazy.config.json"
     fi
-    
+
     echo -e "${GREEN}Configuration deployed successfully!${RESET}"
+}
+
+deploy_caveman_skills() {
+    echo -e "${BLUE}Deploying caveman skills...${RESET}"
+    
+    caveman_skills=("caveman" "caveman-commit" "caveman-review" "caveman-compress" "caveman-stats" "caveman-help" "cavecrew")
+    
+    for skill in "${caveman_skills[@]}"; do
+        if [ -d "$REPO_DIR/skills/global/$skill" ]; then
+            mkdir -p "$TARGET_DIR/skills/$skill"
+            rm -rf "$TARGET_DIR/skills/$skill"/*
+            cp -r "$REPO_DIR/skills/global/$skill/"* "$TARGET_DIR/skills/$skill/" 2>/dev/null || true
+            echo -e "  ${GREEN}Deployed caveman skill: $skill${RESET}"
+        fi
+    done
+    
+    echo -e "${GREEN}Caveman skills deployed!${RESET}"
 }
 
 deploy_skills() {
     echo -e "${BLUE}Deploying skills...${RESET}"
     
-    # Deploy global skills (always loaded)
+    # Deploy global skills (always loaded) — includes caveman
     if [ -d "$REPO_DIR/skills/global" ]; then
         echo -e "${BLUE}Deploying global skills...${RESET}"
         mkdir -p "$TARGET_DIR/skills"
@@ -103,6 +135,19 @@ deploy_skills() {
         cp -r "$REPO_DIR/skills/global/"* "$TARGET_DIR/skills/" 2>/dev/null || true
         global_count=$(ls "$REPO_DIR/skills/global/" 2>/dev/null | wc -l | tr -d ' ')
         echo -e "  ${GREEN}Deployed $global_count global skills${RESET}"
+    fi
+    
+    # Deploy caveman skills explicitly (ensure they're present)
+    deploy_caveman_skills
+    
+    # Deploy lazy-loaded skills
+    if [ -d "$REPO_DIR/lazy-skills" ]; then
+        echo -e "${BLUE}Deploying lazy-loaded skills...${RESET}"
+        mkdir -p "$TARGET_DIR/lazy-skills"
+        rm -rf "$TARGET_DIR/lazy-skills/*"
+        cp -r "$REPO_DIR/lazy-skills/"* "$TARGET_DIR/lazy-skills/" 2>/dev/null || true
+        lazy_count=$(ls "$REPO_DIR/lazy-skills/" 2>/dev/null | wc -l | tr -d ' ')
+        echo -e "  ${GREEN}Deployed $lazy_count lazy-loaded skills${RESET}"
     fi
     
     # Deploy lazy-loaded skills

@@ -1,4 +1,4 @@
-.PHONY: all setup skills-deploy lazy-skills-deploy global-skills-deploy agents deploy clean test help plugins validate
+.PHONY: all setup skills-deploy lazy-skills-deploy global-skills-deploy agents deploy clean test help plugins validate validate-yaml
 
 # Default target - full build and deploy
 all: setup skills-deploy lazy-skills-deploy global-skills-deploy agents deploy plugins
@@ -61,6 +61,25 @@ lazy-skills-deploy: ## Deploy lazy-loaded skills to ~/.config/opencode/lazy-skil
 		echo "$(YELLOW)! No lazy-skills/ directory found or empty$(RESET)"; \
 	fi
 
+caveman-deploy: ## Deploy caveman skills (global compression suite)
+	@echo "$(BLUE)Deploying caveman skills...$(RESET)"
+	@mkdir -p ~/.config/opencode/skills/caveman
+	@mkdir -p ~/.config/opencode/skills/caveman-commit
+	@mkdir -p ~/.config/opencode/skills/caveman-review
+	@mkdir -p ~/.config/opencode/skills/caveman-compress/scripts
+	@mkdir -p ~/.config/opencode/skills/caveman-stats
+	@mkdir -p ~/.config/opencode/skills/caveman-help
+	@mkdir -p ~/.config/opencode/skills/cavecrew
+	@cp -R skills/global/caveman/* ~/.config/opencode/skills/caveman/ 2>/dev/null || true
+	@cp -R skills/global/caveman-commit/* ~/.config/opencode/skills/caveman-commit/ 2>/dev/null || true
+	@cp -R skills/global/caveman-review/* ~/.config/opencode/skills/caveman-review/ 2>/dev/null || true
+	@cp -R skills/global/caveman-compress/* ~/.config/opencode/skills/caveman-compress/ 2>/dev/null || true
+	@cp -R skills/global/caveman-stats/* ~/.config/opencode/skills/caveman-stats/ 2>/dev/null || true
+	@cp -R skills/global/caveman-help/* ~/.config/opencode/skills/caveman-help/ 2>/dev/null || true
+	@cp -R skills/global/cavecrew/* ~/.config/opencode/skills/cavecrew/ 2>/dev/null || true
+	@echo "$(GREEN)✓ Caveman skills deployed!$(RESET)"
+	@echo "$(YELLOW)Caveman always-on. All agents now compress output.$(RESET)"
+
 global-skills-deploy: ## Deploy globally loaded skills to ~/.config/opencode/skills/
 	@echo "$(BLUE)Deploying global skills...$(RESET)"
 	@mkdir -p ~/.config/opencode/skills
@@ -104,13 +123,17 @@ plugins: ## Install and update OpenCode plugins
 	@echo "  - @tarquinen/opencode-dcp"
 	@echo "$(GREEN)✓ Plugin references updated!$(RESET)"
 
-validate: ## Validate all JSON configs
-	@echo "$(BLUE)Validating configuration...$(RESET)"
+validate: validate-yaml ## Validate all configs and skill YAML frontmatter
+	@echo "$(BLUE)Validating JSON configs...$(RESET)"
 	@python3 -c "import json; json.load(open('config/opencode.json'))" && echo "  $(GREEN)✓ opencode.json$(RESET)"
 	@python3 -c "import json; json.load(open('config/tui.json'))" && echo "  $(GREEN)✓ tui.json$(RESET)"
 	@python3 -c "import json; json.load(open('config/fallback.json'))" && echo "  $(GREEN)✓ fallback.json$(RESET)"
 	@python3 -c "import json; json.load(open('lazy.config.json'))" && echo "  $(GREEN)✓ lazy.config.json$(RESET)"
 	@echo "$(GREEN)All configs valid!$(RESET)"
+
+validate-yaml: ## Validate YAML frontmatter in SKILL.md files
+	@echo "$(BLUE)Validating SKILL.md YAML frontmatter...$(RESET)"
+	@python3 scripts/validate-skills-yaml.py
 
 clean: ## Remove deployed configurations
 	@echo "$(RED)Cleaning deployed configurations...$(RESET)"
@@ -126,3 +149,17 @@ test: validate ## Run validation tests
 	@chmod +x scripts/deploy.sh
 	@./scripts/deploy.sh --validate
 	@echo "$(GREEN)Tests complete!$(RESET)"
+
+test-skills: ## Validate all skill YAML frontmatter and structure
+	@echo "$(BLUE)Testing all skills...$(RESET)"
+	@chmod +x scripts/test-skills.sh
+	@./scripts/test-skills.sh
+
+test-skill: ## Test a specific skill (usage: make test-skill NAME=arxiv-database)
+	@if [ -z "$(NAME)" ]; then \
+		echo "$(RED)Usage: make test-skill NAME=<skill-name>$(RESET)"; \
+		echo "$(YELLOW)Example: make test-skill NAME=arxiv-database$(RESET)"; \
+		exit 1; \
+	fi
+	@chmod +x scripts/test-skill.sh
+	@./scripts/test-skill.sh $(NAME)

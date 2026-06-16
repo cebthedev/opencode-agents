@@ -4,7 +4,7 @@
   "presets": {
     "custom": {
       "orchestrator": {
-        "model": "kimi-for-coding-oauth/k2p6",
+        "model": "kimi-for-coding-oauth/k2p7",
         "skills": [
           "*"
         ],
@@ -28,7 +28,7 @@
         "mcps": []
       },
       "librarian": {
-        "model": "kimi-for-coding-oauth/k2p6",
+        "model": "kimi-for-coding-oauth/k2p7",
         "variant": "low",
         "skills": [],
         "mcps": [
@@ -52,7 +52,7 @@
         "mcps": []
       },
       "designer": {
-        "model": "kimi-for-coding-oauth/k2p6",
+        "model": "kimi-for-coding-oauth/k2p7",
         "variant": "medium",
         "skills": [
           "agent-browser"
@@ -66,7 +66,7 @@
         "mcps": []
       },
       "observer": {
-        "model": "kimi-for-coding-oauth/k2p6",
+        "model": "kimi-for-coding-oauth/k2p7",
         "variant": "medium",
         "skills": [],
         "mcps": []

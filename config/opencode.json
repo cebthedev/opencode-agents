@@ -14,7 +14,7 @@
     "build": {
       "description": "Primary development agent with full tool access",
       "mode": "primary",
-      "model": "kimi-for-coding-oauth/k2p6",
+      "model": "kimi-for-coding-oauth/k2p7",
       "temperature": 0.6,
       "permission": {
         "read": "allow",
@@ -37,7 +37,7 @@
     "research": {
       "description": "Primary research agent for literature and scientific analysis",
       "mode": "primary",
-      "model": "kimi-for-coding-oauth/k2p6",
+      "model": "kimi-for-coding-oauth/k2p7",
       "temperature": 0.8,
       "permission": {
         "read": "allow",
@@ -60,7 +60,7 @@
     "plan": {
       "description": "Planning agent for analysis without making changes",
       "mode": "primary",
-      "model": "kimi-for-coding-oauth/k2p6",
+      "model": "kimi-for-coding-oauth/k2p7",
       "temperature": 0.1,
       "permission": {
         "read": "allow",
@@ -89,7 +89,7 @@
     "coder": {
       "description": "Autonomous coding agent for complex programming tasks",
       "mode": "subagent",
-      "model": "kimi-for-coding-oauth/k2p6",
+      "model": "kimi-for-coding-oauth/k2p7",
       "temperature": 0.7,
       "permission": {
         "read": "allow",
@@ -109,7 +109,7 @@
     "clean-coder": {
       "description": "TDD-focused clean code agent",
       "mode": "subagent",
-      "model": "kimi-for-coding-oauth/k2p6",
+      "model": "kimi-for-coding-oauth/k2p7",
       "temperature": 0.6,
       "permission": {
         "read": "allow",
@@ -129,7 +129,7 @@
     "code-reviewer": {
       "description": "Code reviewer for quality and security",
       "mode": "subagent",
-      "model": "kimi-for-coding-oauth/k2p6",
+      "model": "kimi-for-coding-oauth/k2p7",
       "temperature": 0.5,
       "permission": {
         "read": "allow",
@@ -194,7 +194,7 @@
     "researcher": {
       "description": "Deep literature research agent",
       "mode": "subagent",
-      "model": "kimi-for-coding-oauth/k2p6",
+      "model": "kimi-for-coding-oauth/k2p7",
       "temperature": 0.8,
       "permission": {
         "read": "allow",
@@ -239,7 +239,7 @@
     "writer": {
       "description": "Expert writer for narrative and explanatory content",
       "mode": "subagent",
-      "model": "kimi-for-coding-oauth/k2p6",
+      "model": "kimi-for-coding-oauth/k2p7",
       "temperature": 1.0,
       "permission": {
         "read": "allow",
@@ -373,6 +373,39 @@
         "baseURL": "https://api.kimi.com/coding/v1"
       },
       "models": {
+        "k2p7": {
+          "name": "Kimi-k2.7",
+          "reasoning": true,
+          "options": {},
+          "variants": {
+            "off": {
+              "reasoning_effort": "off"
+            },
+            "auto": {
+              "reasoning_effort": "auto"
+            },
+            "low": {
+              "reasoning_effort": "low"
+            },
+            "medium": {
+              "reasoning_effort": "medium"
+            },
+            "high": {
+              "reasoning_effort": "high"
+            }
+          },
+          "attachment": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "video"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
         "k2p6": {
           "name": "Kimi-k2.6",
           "reasoning": true,

@@ -10,23 +10,46 @@ A comprehensive agent configuration for [OpenCode](https://opencode.ai) with **c
 - **OpenSpec Workflow** — Structured planning and implementation workflow
 - **Vim-centric TUI** — Vim muscle memory keybinds for comfortable scrolling
 - **Auto-fallback plugin** — Intelligent retry with provider switching
+- **Caveman Compression** — 65-75% token savings via globally-loaded caveman skills (always-on, all agents)
 - **Large context fallback** — Automatic switch to bigger context models
-- **12 specialized agents** — From coding to research to architecture
+- **13 specialized agents** — From coding to research to architecture (including caveman compression)
 
-## Quick Start
+## Quick Start — Generate Your `.config/opencode`
+
+This repository is a **complete configuration generator** for OpenCode. Run these commands to set up your entire `~/.config/opencode/` directory:
 
 ```bash
-# Full installation (deploys configs, skills, agents)
+# 1. Clone and enter the repository
+git clone <repo-url> opencode-agents
+cd opencode-agents
+
+# 2. Set up your environment (edit with your API keys)
+cp .env.example ~/.config/opencode/.env
+# Edit ~/.config/opencode/.env and add your keys
+
+# 3. Full deployment (configs, skills, agents)
 make all
 
-# Install Pantheon agents (run once)
+# 4. Install Pantheon agents (run once)
 bunx oh-my-opencode-slim@latest install
 
-# Or step by step
-make setup              # Create directories
-make skills-deploy      # Deploy lazy-loaded and global skills
-make agents             # Deploy agent configurations
-make deploy             # Deploy configuration files
+# 5. Install plugins (see Plugin Guide below)
+# opencode plugin add opencode-plugin-openspec --global
+# opencode plugin add opencode-kimi-full --global
+# opencode plugin add @zenobius/opencode-skillful --global
+# npm install -g opencode-auto-fallback
+
+# 6. Start OpenCode
+opencode
+```
+
+### Step by Step
+
+```bash
+make setup              # Create directories and copy .env template
+make skills-deploy      # Deploy lazy-loaded (219) and global (7) skills
+make agents             # Deploy 12 agent configurations
+make deploy             # Deploy config files (opencode.json, tui.json, etc.)
 make plugins            # Show plugin installation commands
 ```
 
@@ -39,38 +62,94 @@ make plugins            # Show plugin installation commands
 
 ## Model Providers
 
-This configuration uses **4 model providers** for maximum resilience:
+This configuration uses **multiple providers** with automatic fallback for maximum resilience:
 
-| Provider | Models | API Key | Tier |
-|----------|--------|---------|------|
-| **Moonshot AI** | Kimi K2.6, Kimi K2.5 | `MOONSHOT_API_KEY` | Free |
-| **Google AI Studio** | Gemini 2.5 Pro/Flash, 1.5 Pro/Flash | `GEMINI_API_KEY` | **Free** |
-| **DeepSeek** | DeepSeek Chat, DeepSeek Reasoner | `DEEPSEEK_API_KEY` | **Free** |
-| **OpenCodeGo** | GLM-5, GLM-5.1, Qwen, DeepSeek | `OPENAI_API_KEY` | Free |
+| Provider | Provider ID | Models | API Key | Fallback Tier |
+|----------|-------------|--------|---------|---------------|
+| **Kimi OAuth** | `kimi-for-coding-oauth` | K2.6 (k2p6), K2.5 (k2p5) with reasoning variants | `OPENAI_API_KEY` | Primary |
+| **Google AI Studio** | `google` (built-in) | Gemini 2.5 Pro, Gemini 2.5 Flash | `GEMINI_API_KEY` | **Free** |
+| **DeepSeek** | `deepseek` (built-in) | Chat, Reasoner | `DEEPSEEK_API_KEY` | **Free** |
+| **OpenCodeGo** | `opencode-go` (built-in) | GLM-5, GLM-5.1, Qwen, DeepSeek | `OPENAI_API_KEY` | Free |
+
+### Reasoning Variants (Kimi OAuth)
+
+Kimi models support configurable reasoning effort:
+
+| Variant | Use Case |
+|---------|----------|
+| `off` | Fast responses, no reasoning overhead |
+| `auto` | Let the model decide reasoning depth |
+| `low` | Quick tasks, simple queries |
+| `medium` | Standard development and research (default for most agents) |
+| `high` | Deep analysis, architecture review, complex reasoning |
+
+Configure per-agent in the agent markdown frontmatter:
+```yaml
+model: kimi-for-coding-oauth/k2p6
+variant: high  # or medium, low, auto, off
+```
+
+## Plugins
+
+Plugins extend OpenCode with additional capabilities. Install these after running `make all`:
+
+### Required Plugins
+
+| Plugin | Install Command | Purpose | Check Updates |
+|--------|----------------|---------|---------------|
+| **opencode-auto-fallback** | `npm install -g opencode-auto-fallback` | Automatic model fallback on errors | `npm outdated -g opencode-auto-fallback` |
+| **oh-my-opencode-slim** | `bunx oh-my-opencode-slim@latest install` | Pantheon agent orchestration | [GitHub Releases](https://github.com/HyeokjaeLee/oh-my-opencode-slim/releases) |
+| **opencode-plugin-openspec** | `opencode plugin add opencode-plugin-openspec --global` | Structured planning workflow | `opencode plugin list` |
+| **opencode-kimi-full** | `opencode plugin add opencode-kimi-full --global` | Enhanced Kimi model support | `opencode plugin list` |
+| **@zenobius/opencode-skillful** | `opencode plugin add @zenobius/opencode-skillful --global` | Skill management enhancements | `opencode plugin list` |
+
+### Plugin Update Checklist
+
+Run these commands monthly to check for updates:
+
+```bash
+# NPM packages
+npm outdated -g opencode-auto-fallback
+
+# OpenCode plugins
+opencode plugin list
+
+# oh-my-opencode-slim (check for new releases)
+bunx oh-my-opencode-slim@latest --version
+```
+
+### Plugin Configuration
+
+Plugin configs are deployed to `~/.config/opencode/`:
+- `opencode-auto-fallback` → `fallback.json`
+- `oh-my-opencode-slim` → `oh-my-opencode-slim.json`
+- `opencode-plugin-openspec` → integrated into agent prompts
 
 ## Agents
 
 ### Primary Agents (Tab to switch)
 
-| Agent | Description | Model | Fallback Chain |
-|-------|-------------|-------|----------------|
-| **build** | Full development with all tools | **Kimi K2.6** | Gemini → DeepSeek → GLM-5.1 |
-| **research** | Literature research & paper analysis | **Kimi K2.6** | Gemini → DeepSeek → GLM-5.1 |
-| **plan** | Analysis & planning (no changes) | **Gemini 2.5 Pro** | DeepSeek → GLM-5 → Kimi |
+| Agent | Description | Model | Variant | Fallback Chain |
+|-------|-------------|-------|---------|----------------|
+| **build** | Full development with all tools | **Kimi K2.6** | medium | Gemini → DeepSeek → GLM-5.1 |
+| **research** | Literature research & paper analysis | **Kimi K2.6** | medium | Gemini → DeepSeek → GLM-5.1 |
+| **plan** | Analysis & planning (no changes) | **Kimi K2.6** | high | Gemini → DeepSeek → GLM-5 |
 
 ### Subagents (@ to invoke)
 
-| Agent | Description | Model | Fallback Chain |
-|-------|-------------|-------|----------------|
-| **coder** | Complex programming tasks | **Kimi K2.6** | Gemini → DeepSeek → GLM-5.1 |
-| **clean-coder** | TDD-focused clean code | Kimi K2.6 | GLM-5.1 → Gemini |
-| **code-reviewer** | Quality & security review | Kimi K2.6 | GLM-5.1 → Gemini |
-| **beagle** | Web research & fact-checking | **Gemini 2.5 Flash** | Kimi → GLM-5.1 |
-| **paper-analyst** | Download & analyze papers | **DeepSeek Chat** | Kimi → Gemini → DeepSeek-v4 |
-| **researcher** | Deep literature research | Kimi K2.6 | Gemini → DeepSeek |
-| **architect** | Solution architecture | **Gemini 2.5 Pro** | DeepSeek → GLM-5 → Kimi |
-| **writer** | Multilingual writing | **Gemini 2.5 Pro** | GLM-5 → Kimi |
-| **data-scientist** | Data analysis & visualization | **DeepSeek Reasoner** | Gemini → Qwen → Kimi |
+| Agent | Description | Model | Variant | Fallback Chain |
+|-------|-------------|-------|---------|----------------|
+| **coder** | Complex programming tasks | **Kimi K2.6** | medium | Gemini → DeepSeek → GLM-5.1 |
+| **clean-coder** | TDD-focused clean code | **Kimi K2.6** | medium | GLM-5.1 → Gemini |
+| **code-reviewer** | Quality & security review | **Kimi K2.6** | high | GLM-5.1 → Gemini |
+| **beagle** | Web research & fact-checking | **Gemini 2.5 Flash** | — | Kimi → GLM-5.1 |
+| **paper-analyst** | Download & analyze papers | **DeepSeek Chat** | — | Kimi → Gemini → DeepSeek-v4 |
+| **researcher** | Deep literature research | **Kimi K2.6** | high | Gemini → DeepSeek |
+| **architect** | Solution architecture | **Gemini 2.5 Pro** | — | DeepSeek → GLM-5 → Kimi |
+| **writer** | Multilingual writing | **Gemini 2.5 Pro** | — | GLM-5 → Kimi |
+| **data-scientist** | Data analysis & visualization | **DeepSeek Reasoner** | — | Gemini → Qwen → Kimi |
+
+> **Note**: Model paths use `kimi-for-coding-oauth/k2p6` for Kimi models (OAuth provider) and built-in prefixes (`google/`, `deepseek/`, `opencode-go/`) for others.
 
 ## Agent Orchestration
 
@@ -271,13 +350,14 @@ Skills are organized into **lazy-loaded** (on-demand) and **globally loaded** (a
 - OpenSpec workflow skills (openspec-explore, openspec-new-change, etc.)
 - And many more...
 
-**`skills/global/`** (6 skills) — Always loaded:
+**`skills/global/`** (7 skills) — Always loaded:
 - deepthink — Structured reasoning
 - python-design-patterns — Architecture patterns
 - python-qa — Code quality
 - software-architecture — Design decisions
 - decision-critic — Validation
 - content-humanizer — Writing style
+- caveman — Token compression (always-on, all agents)
 
 ### Using Skills
 
@@ -300,6 +380,33 @@ The registry maps skills to agents by category:
 ```
 skills/registry.json
 ```
+
+## Caveman Compression (Always-On)
+
+All agents use **caveman-style communication** by default. This cuts ~65-75% of output tokens while keeping full technical accuracy. No command needed — it's always active.
+
+### Caveman Sub-Skills
+
+| Skill | Command | Purpose |
+|---|---|---|
+| **caveman** | (always on) | Compress all agent output to terse, accurate prose |
+| **caveman-commit** | `/caveman-commit` | Conventional Commits, ≤50 char subject. Why over what. |
+| **caveman-review** | `/caveman-review` | One-line PR comments: `L42: 🔴 bug: user null. Add guard.` |
+| **caveman-compress** | `/caveman-compress <file>` | Rewrite memory files to caveman-speak. Cuts ~46% input tokens. |
+| **caveman-stats** | `/caveman-stats` | Session token usage + lifetime savings + USD. |
+
+### Caveman Intensity Levels
+
+| Level | Style |
+|---|---|
+| **lite** | No filler/hedging. Keep articles. Professional but tight. |
+| **full** | Drop articles, fragments OK. Classic caveman. Default. |
+| **ultra** | Maximum compression. Abbreviate prose words. |
+| **wenyan-lite** | Semi-classical Chinese. |
+| **wenyan-full** | Maximum classical terseness. |
+| **wenyan-ultra** | Extreme abbreviation, classical Chinese feel. |
+
+Auto-clarity: caveman temporarily pauses for security warnings, irreversible actions, or when user asks for clarification. Resumes after.
 
 ## Pantheon Agents (via oh-my-opencode-slim)
 
