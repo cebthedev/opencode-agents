@@ -1,6 +1,7 @@
 ---
 name: constitution
 description: Create or update the project constitution from interactive or provided principle inputs, ensuring all dependent templates stay in sync.
+tags: [principles, guidelines, project, rules]
 ---
 
 ## User Input

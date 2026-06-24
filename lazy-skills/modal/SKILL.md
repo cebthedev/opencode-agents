@@ -4,6 +4,7 @@ description: Run Python code in the cloud with serverless containers, GPUs, and 
 license: Apache-2.0 license
 metadata:
     skill-author: K-Dense Inc.
+tags: [serverless, cloud, compute, GPU, deployment, infrastructure]
 ---
 
 # Modal

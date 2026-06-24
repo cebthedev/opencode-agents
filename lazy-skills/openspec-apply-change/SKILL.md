@@ -7,6 +7,7 @@ metadata:
   author: openspec
   version: "1.0"
   generatedBy: "1.0.2"
+tags: [implementation, coding, workflow, change]
 ---
 
 Implement tasks from an OpenSpec change.

@@ -7,6 +7,7 @@ metadata:
   author: openspec
   version: "1.0"
   generatedBy: "1.0.2"
+tags: [planning, requirements, exploration, workflow]
 ---
 
 Enter explore mode. Think deeply. Visualize freely. Follow the conversation wherever it goes.

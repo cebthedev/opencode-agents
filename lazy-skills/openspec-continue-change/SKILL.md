@@ -7,6 +7,7 @@ metadata:
   author: openspec
   version: "1.0"
   generatedBy: "1.0.2"
+tags: [resume, workflow, change, continuation]
 ---
 
 Continue working on a change by creating the next artifact.

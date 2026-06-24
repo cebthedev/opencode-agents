@@ -1,6 +1,7 @@
 ---
 name: doc-sync
 description: Synchronizes docs across a repository. Use when user asks to sync docs.
+tags: [documentation, sync, maintenance]
 ---
 
 # Doc Sync

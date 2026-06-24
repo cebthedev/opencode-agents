@@ -4,6 +4,7 @@ description: Self-hosted, open-source alternative to Google NotebookLM for AI-po
 license: MIT
 metadata:
     skill-author: K-Dense Inc.
+tags: [notebook, research, AI, documents, privacy]
 ---
 
 # Open Notebook

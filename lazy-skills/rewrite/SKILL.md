@@ -1,6 +1,7 @@
 ---
 name: rewrite
 description: Guidelines for rewrite mode, including workflow, best practices, and risk mitigation strategies.
+tags: [writing, editing, improvement]
 ---
 
 # Rewrite Mode Guidelines

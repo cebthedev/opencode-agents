@@ -5,6 +5,7 @@ allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [markdown, conversion, documents]
 ---
 
 # MarkItDown - File to Markdown Conversion

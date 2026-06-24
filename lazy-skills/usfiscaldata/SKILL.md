@@ -4,6 +4,7 @@ description: Query the U.S. Treasury Fiscal Data API for federal financial data 
 license: MIT
 metadata:
     skill-author: K-Dense Inc.
+tags: [fiscal, government, data, economics]
 ---
 
 # U.S. Treasury Fiscal Data API

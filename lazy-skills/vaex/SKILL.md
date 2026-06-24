@@ -4,6 +4,7 @@ description: Use this skill for processing and analyzing large tabular datasets 
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [DataFrame, big-data, out-of-core, visualization]
 ---
 
 # Vaex

@@ -4,6 +4,7 @@ description: Perform comprehensive exploratory data analysis on scientific data 
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [EDA, data-analysis, statistics, visualization]
 ---
 
 # Exploratory Data Analysis

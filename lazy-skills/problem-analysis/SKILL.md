@@ -1,6 +1,7 @@
 ---
 name: problem-analysis
 description: Invoke IMMEDIATELY via python script when user requests problem analysis or root cause investigation. Do NOT explore first - the script orchestrates the investigation.
+tags: [debugging, analysis, problem-solving, root-cause]
 ---
 
 # Problem Analysis

@@ -4,6 +4,7 @@ description: Guided statistical analysis with test selection and reporting. Use 
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [statistics, analysis, hypothesis-testing, data]
 ---
 
 # Statistical Analysis

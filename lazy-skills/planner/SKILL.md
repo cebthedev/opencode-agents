@@ -1,6 +1,7 @@
 ---
 name: planner
 description: Interactive planning and execution for complex tasks. IMMEDIATELY invoke when user asks to use planner.
+tags: [planning, organization, tasks]
 ---
 
 ## Activation

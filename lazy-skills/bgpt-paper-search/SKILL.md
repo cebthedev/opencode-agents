@@ -7,6 +7,7 @@ metadata:
     skill-author: BGPT
     website: https://bgpt.pro/mcp
     github: https://github.com/connerlambden/bgpt-mcp
+tags: [papers, search, research, academic, google-scholar]
 ---
 
 # BGPT Paper Search

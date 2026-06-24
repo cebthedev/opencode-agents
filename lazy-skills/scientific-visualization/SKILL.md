@@ -4,6 +4,7 @@ description: Meta-skill for publication-ready figures. Use when creating journal
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [visualization, research, plots, scientific]
 ---
 
 # Scientific Visualization

@@ -4,6 +4,7 @@ description: Production-ready reinforcement learning algorithms (PPO, SAC, DQN, 
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [RL, reinforcement-learning, policy, agent, OpenAI-Gym]
 ---
 
 # Stable Baselines3

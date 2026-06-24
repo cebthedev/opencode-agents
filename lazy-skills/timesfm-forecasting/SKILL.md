@@ -6,6 +6,7 @@ license: Apache-2.0 license
 metadata:
   skill-author: Clayton Young / Superior Byte Works, LLC (@borealBytes)
   skill-version: "1.0.0"
+tags: [time-series, forecasting, temporal, Google, deep-learning]
 ---
 
 # TimesFM Forecasting

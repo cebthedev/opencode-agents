@@ -1,6 +1,7 @@
 ---
 name: incoherence
 description: Detect and resolve incoherence in documentation, code, specs vs implementation.
+tags: [validation, consistency, specs, quality]
 ---
 
 # Incoherence Detector

@@ -1,6 +1,7 @@
 ---
 name: tasks
 description: Generate detailed, organized tasks.md for feature implementation based on design documents, with plan-to-tasks traceability checkpoint.
+tags: [tasks, management, organization]
 ---
 
 ## User Input

@@ -4,6 +4,7 @@ description: This skill should be used for time series machine learning tasks in
 license: BSD-3-Clause license
 metadata:
     skill-author: K-Dense Inc.
+tags: [time-series, ML, classification, forecasting, clustering]
 ---
 
 # Aeon Time Series Machine Learning

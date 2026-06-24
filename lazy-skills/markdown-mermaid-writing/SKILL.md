@@ -14,6 +14,7 @@ metadata:
     - name: K-Dense Team
       org: K-Dense Inc.
       role: Integration target and community feedback
+tags: [markdown, diagrams, mermaid, documentation]
 ---
 
 # Markdown and Mermaid Writing

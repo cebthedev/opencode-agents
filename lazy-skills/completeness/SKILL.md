@@ -1,6 +1,7 @@
 ---
 name: completeness
 description: Post-implementation final validation — verify end-to-end traceability, constitution compliance, and requirement fulfillment across all artifacts and code changes.
+tags: [validation, traceability, requirements, quality]
 ---
 
 ## User Input

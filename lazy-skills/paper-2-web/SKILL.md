@@ -5,6 +5,7 @@ allowed-tools: Read Write Edit Bash
 license: Unknown
 metadata:
     skill-author: K-Dense Inc.
+tags: [papers, web, conversion, research, sharing]
 ---
 
 # Paper2All: Academic Paper Transformation Pipeline

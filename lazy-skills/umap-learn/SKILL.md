@@ -4,6 +4,7 @@ description: UMAP dimensionality reduction. Fast nonlinear manifold learning for
 license: BSD-3-Clause license
 metadata:
     skill-author: K-Dense Inc.
+tags: [dimensionality-reduction, visualization, clustering, ML]
 ---
 
 # UMAP-Learn

@@ -5,6 +5,7 @@ license: Apache-2.0 license
 compatibility: Some features require an Huggingface token
 metadata:
     skill-author: K-Dense Inc.
+tags: [HuggingFace, LLM, NLP, BERT, GPT, foundation-models, transformers]
 ---
 
 # Transformers

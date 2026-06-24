@@ -4,6 +4,7 @@ description: Search and retrieve preprints from arXiv via the Atom API. Use this
 license: MIT
 metadata:
     skill-author: Orchestra Research
+tags: [arxiv, papers, research, NLP, ML, AI, literature-review, preprints]
 ---
 
 # arXiv Database

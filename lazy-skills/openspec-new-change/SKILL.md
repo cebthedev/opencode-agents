@@ -7,6 +7,7 @@ metadata:
   author: openspec
   version: "1.0"
   generatedBy: "1.0.2"
+tags: [planning, change, specification, workflow]
 ---
 
 Start a new change using the experimental artifact-driven approach.

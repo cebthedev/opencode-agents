@@ -5,6 +5,7 @@ allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [diagrams, schematics, research, visualization]
 ---
 
 # Scientific Schematics and Diagrams

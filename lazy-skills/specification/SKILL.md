@@ -1,6 +1,7 @@
 ---
 name: specification
 description: Create or update the feature specification from a natural language feature description, with optional slicing for large features.
+tags: [specs, requirements, documentation]
 ---
 
 ## User Input

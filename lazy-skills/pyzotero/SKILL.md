@@ -5,6 +5,7 @@ allowed-tools: Read Write Edit Bash
 license: MIT License
 metadata:
     skill-author: K-Dense Inc.
+tags: [Zotero, references, bibliography, research]
 ---
 
 # Pyzotero

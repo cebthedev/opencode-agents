@@ -4,6 +4,7 @@ description: Deep learning framework (PyTorch Lightning). Organize PyTorch code 
 license: Apache-2.0 license
 metadata:
     skill-author: K-Dense Inc.
+tags: [deep-learning, PyTorch, neural-networks, training, ML]
 ---
 
 # PyTorch Lightning

@@ -4,6 +4,7 @@ description: Python library for working with geospatial vector data including sh
 license: BSD-3-Clause license
 metadata:
     skill-author: K-Dense Inc.
+tags: [GIS, geospatial, maps, spatial-data]
 ---
 
 # GeoPandas

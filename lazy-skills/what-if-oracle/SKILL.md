@@ -5,6 +5,7 @@ allowed-tools: Read Write
 license: MIT license
 metadata:
   skill-author: AHK Strategies (ashrafkahoush-ux)
+tags: [scenarios, analysis, forecasting, what-if]
 ---
 
 # What-If Oracle — Possibility Space Explorer

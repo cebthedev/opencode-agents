@@ -1,6 +1,7 @@
 ---
 name: prompt-engineer
 description: Invoke IMMEDIATELY via python script when user requests prompt optimization. Do NOT analyze first - invoke this skill immediately.
+tags: [prompts, LLM, optimization, engineering]
 ---
 
 # Prompt Engineer

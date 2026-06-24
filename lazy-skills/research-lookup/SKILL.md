@@ -6,6 +6,7 @@ license: MIT license
 compatibility: PARALLEL_API_KEY and OPENROUTER_API_KEY required
 metadata:
     skill-author: K-Dense Inc.
+tags: [research, lookup, facts, verification]
 ---
 
 # Research Information Lookup

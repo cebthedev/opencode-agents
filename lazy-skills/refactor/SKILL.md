@@ -1,6 +1,7 @@
 ---
 name: refactor
 description: Invoke IMMEDIATELY via python script when user requests refactoring analysis, technical debt review, or code quality improvement. Do NOT explore first - the script orchestrates exploration.
+tags: [refactoring, clean-code, technical-debt, improvement]
 ---
 
 # Refactor

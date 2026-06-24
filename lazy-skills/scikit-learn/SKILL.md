@@ -4,6 +4,7 @@ description: Machine learning in Python with scikit-learn. Use when working with
 license: BSD-3-Clause license
 metadata:
     skill-author: K-Dense Inc.
+tags: [ML, machine-learning, classification, regression, clustering, preprocessing]
 ---
 
 # Scikit-learn

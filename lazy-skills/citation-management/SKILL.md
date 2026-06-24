@@ -5,6 +5,7 @@ allowed-tools: Read Write Edit Bash
 license: MIT License
 metadata:
     skill-author: K-Dense Inc.
+tags: [citations, references, bibliography, research]
 ---
 
 # Citation Management

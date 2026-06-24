@@ -5,6 +5,7 @@ license: MIT license
 compatibility: Requires an OpenRouter API key
 metadata:
     skill-author: K-Dense Inc.
+tags: [images, generation, AI, visualization]
 ---
 
 # Generate Image

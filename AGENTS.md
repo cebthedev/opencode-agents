@@ -4,7 +4,7 @@ Repository-specific guidance for AI agents working in this codebase.
 
 ## What this repo is
 
-Configuration generator for OpenCode — deploys 12+ agents, 219+ lazy-loaded skills, and multi-provider fallback to `~/.config/opencode/`.
+Configuration generator for OpenCode — deploys 12+ agents, 104+ lazy-loaded skills, and multi-provider fallback to `~/.config/opencode/`.
 
 ## Critical: always use caveman compression
 

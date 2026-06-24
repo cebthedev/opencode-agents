@@ -2,6 +2,7 @@
 name: pdf-to-markdown
 description: Convert entire PDF documents to clean, structured Markdown for full context loading. Use this skill when the user wants to extract ALL text from a PDF into context (not grep/search), when discussing or analyzing PDF content in full, when the user mentions "load the whole PDF", "bring the PDF into context", "read the entire PDF", or when partial extraction/grepping would miss important context. This is the preferred method for PDF text extraction over page-by-page or grep approaches.
 source: https://github.com/aliceisjustplaying/claude-skill-pdf-to-markdown
+tags: [PDF, conversion, markdown, extraction]
 ---
 
 # PDF to Markdown Converter

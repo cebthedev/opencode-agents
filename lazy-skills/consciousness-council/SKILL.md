@@ -5,6 +5,7 @@ allowed-tools: Read Write
 license: MIT license
 metadata:
   skill-author: AHK Strategies (ashrafkahoush-ux)
+tags: [deliberation, decisions, perspectives, council]
 ---
 
 # Consciousness Council

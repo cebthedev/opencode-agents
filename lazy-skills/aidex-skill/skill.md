@@ -6,6 +6,7 @@ triggers:
   - find definition
   - where is
   - what changed
+tags: [code-search, indexing, repository, navigation]
 ---
 
 ## AiDex - Persistent Code Index (MCP Server)

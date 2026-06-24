@@ -6,6 +6,7 @@ license: MIT license
 compatibility: PARALLEL_API_KEY required
 metadata:
     skill-author: K-Dense Inc.
+tags: [web, parallel, scraping, requests]
 ---
 
 # Parallel Web Systems API

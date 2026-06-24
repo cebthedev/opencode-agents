@@ -7,6 +7,7 @@ metadata:
   author: openspec
   version: "1.0"
   generatedBy: "1.0.2"
+tags: [archive, bulk, workflow, history]
 ---
 
 Archive multiple completed changes in a single operation.

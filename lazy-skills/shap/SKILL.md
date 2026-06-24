@@ -4,6 +4,7 @@ description: Model interpretability and explainability using SHAP (SHapley Addit
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [XAI, explainability, interpretability, model-explanation, ML]
 ---
 
 # SHAP (SHapley Additive exPlanations)

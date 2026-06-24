@@ -4,6 +4,7 @@ description: Access real-time and historical stock market data, forex rates, cry
 license: Unknown
 metadata:
     skill-author: K-Dense Inc.
+tags: [finance, stocks, API, market-data]
 ---
 
 # Alpha Vantage — Financial Market Data

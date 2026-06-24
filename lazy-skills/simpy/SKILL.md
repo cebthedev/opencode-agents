@@ -4,6 +4,7 @@ description: Process-based discrete-event simulation framework in Python. Use th
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [simulation, discrete-event, modeling, processes]
 ---
 
 # SimPy - Discrete-Event Simulation

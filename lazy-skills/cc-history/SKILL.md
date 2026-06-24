@@ -1,6 +1,7 @@
 ---
 name: cc-history
 description: Reference documentation for analyzing Claude Code conversation history files
+tags: [history, Claude-Code, conversation, analysis]
 ---
 
 # Claude Code History Analysis

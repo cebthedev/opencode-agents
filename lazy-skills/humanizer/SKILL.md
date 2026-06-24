@@ -9,6 +9,7 @@ parallelisms, and excessive conjunctive phrases.
 
 Credits: Original skill by @blader - https://github.com/blader/humanizer
 source: https://github.com/davila7/claude-code-templates/tree/main/cli-tool/components/skills/productivity/humanizer
+tags: [writing, AI-detection, natural, style]
 ---
 
 # Humanizer: Remove AI Writing Patterns

@@ -4,6 +4,7 @@ description: Query FRED (Federal Reserve Economic Data) API for 800,000+ economi
 license: Unknown
 metadata:
     skill-author: K-Dense Inc.
+tags: [economics, data, FRED, Federal-Reserve]
 ---
 
 # FRED Economic Data Access

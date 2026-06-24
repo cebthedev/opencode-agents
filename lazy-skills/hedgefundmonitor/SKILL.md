@@ -4,6 +4,7 @@ description: Query the OFR (Office of Financial Research) Hedge Fund Monitor API
 license: MIT
 metadata:
     skill-author: K-Dense Inc.
+tags: [finance, hedge-funds, monitoring, data]
 ---
 
 # OFR Hedge Fund Monitor API

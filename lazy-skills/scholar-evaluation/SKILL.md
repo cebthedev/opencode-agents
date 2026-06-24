@@ -4,6 +4,7 @@ description: Systematically evaluate scholarly work using the ScholarEval framew
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [research, evaluation, metrics, academic]
 ---
 
 # Scholar Evaluation

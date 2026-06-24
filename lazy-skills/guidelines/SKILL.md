@@ -1,6 +1,7 @@
 ---
 name: guidelines
 description: Dynamically discover and apply domain-specific guidelines based on the current task context.
+tags: [standards, best-practices, guidelines, domain-specific]
 ---
 
 ## User Input

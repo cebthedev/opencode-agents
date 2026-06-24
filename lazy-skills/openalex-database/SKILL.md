@@ -4,6 +4,7 @@ description: Query and analyze scholarly literature using the OpenAlex database.
 license: Unknown
 metadata:
     skill-author: K-Dense Inc.
+tags: [papers, citations, research, academic, bibliometrics]
 ---
 
 # OpenAlex Database

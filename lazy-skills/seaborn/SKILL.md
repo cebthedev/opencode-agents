@@ -4,6 +4,7 @@ description: Statistical visualization with pandas integration. Use for quick ex
 license: BSD-3-Clause license
 metadata:
     skill-author: K-Dense Inc.
+tags: [visualization, statistics, plots, aesthetic, matplotlib]
 ---
 
 # Seaborn Statistical Visualization

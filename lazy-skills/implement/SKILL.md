@@ -1,6 +1,7 @@
 ---
 name: implement
 description: Execute implementation tasks for a single batch with requirement tracing and constitution compliance. Returns results; does NOT update checkpoints or tasks.md.
+tags: [coding, implementation, feature, development]
 ---
 
 ## User Input

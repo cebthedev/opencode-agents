@@ -6,13 +6,14 @@ A comprehensive agent configuration for [OpenCode](https://opencode.ai) with **c
 
 - **Multi-provider resilience** — 4 model providers with automatic fallback
 - **Pantheon Agent Orchestration** — 8 specialized agents via oh-my-opencode-slim (@orchestrator auto-delegates)
-- **Lazy-Loaded Skills** — 220+ skills on-demand via skill_find/skill_use
+- **Cavecrew Subagents** — 3 compressed-output agents for context-efficient delegation
+- **Lazy-Loaded Skills** — 104 curated skills on-demand via `skill_find` / `skill_use`
 - **OpenSpec Workflow** — Structured planning and implementation workflow
 - **Vim-centric TUI** — Vim muscle memory keybinds for comfortable scrolling
 - **Auto-fallback plugin** — Intelligent retry with provider switching
 - **Caveman Compression** — 65-75% token savings via globally-loaded caveman skills (always-on, all agents)
 - **Large context fallback** — Automatic switch to bigger context models
-- **13 specialized agents** — From coding to research to architecture (including caveman compression)
+- **16 agent files** — From coding to research to architecture (including caveman compression)
 
 ## Quick Start — Generate Your `.config/opencode`
 
@@ -47,8 +48,8 @@ opencode
 
 ```bash
 make setup              # Create directories and copy .env template
-make skills-deploy      # Deploy lazy-loaded (219) and global (7) skills
-make agents             # Deploy 12 agent configurations
+make skills-deploy      # Deploy lazy-loaded (104) and global (13) skills
+make agents             # Deploy agent configurations
 make deploy             # Deploy config files (opencode.json, tui.json, etc.)
 make plugins            # Show plugin installation commands
 ```
@@ -57,7 +58,7 @@ make plugins            # Show plugin installation commands
 
 - [OpenCode](https://opencode.ai) installed
 - Git
-- Python 3.8+ (for skill parsing)
+- Python 3.8+ (for skill parsing and validation)
 - API keys (see `.env.example`)
 
 ## Model Providers
@@ -66,10 +67,9 @@ This configuration uses **multiple providers** with automatic fallback for maxim
 
 | Provider | Provider ID | Models | API Key | Fallback Tier |
 |----------|-------------|--------|---------|---------------|
-| **Kimi OAuth** | `kimi-for-coding-oauth` | K2.6 (k2p6), K2.5 (k2p5) with reasoning variants | `OPENAI_API_KEY` | Primary |
-| **Google AI Studio** | `google` (built-in) | Gemini 2.5 Pro, Gemini 2.5 Flash | `GEMINI_API_KEY` | **Free** |
-| **DeepSeek** | `deepseek` (built-in) | Chat, Reasoner | `DEEPSEEK_API_KEY` | **Free** |
-| **OpenCodeGo** | `opencode-go` (built-in) | GLM-5, GLM-5.1, Qwen, DeepSeek | `OPENAI_API_KEY` | Free |
+| **Kimi OAuth** | `kimi-for-coding-oauth` | K2.7 (k2p7), K2.6 (k2p6), K2.5 (k2p5) with reasoning variants | `MOONSHOT_API_KEY` | Primary |
+| **DeepSeek** | `deepseek` (built-in) | Chat, Reasoner | `DEEPSEEK_API_KEY` | Backup |
+| **OpenCode** | `opencode` (built-in) | DeepSeek-V4-Flash, MiMo-V2.5, Qwen-3.6, North-Mini, Nemotron-3, MiniMax-M3, Big-Pickle | `OPENAI_API_KEY` | Free |
 
 ### Reasoning Variants (Kimi OAuth)
 
@@ -85,13 +85,13 @@ Kimi models support configurable reasoning effort:
 
 Configure per-agent in the agent markdown frontmatter:
 ```yaml
-model: kimi-for-coding-oauth/k2p6
+model: kimi-for-coding-oauth/k2p7
 variant: high  # or medium, low, auto, off
 ```
 
 ## Plugins
 
-Plugins extend OpenCode with additional capabilities. Install these after running `make all`:
+Plugins extend OpenCode with additional capabilities. See [`docs/PLUGIN_GUIDE.md`](docs/PLUGIN_GUIDE.md) for detailed installation and configuration instructions.
 
 ### Required Plugins
 
@@ -121,9 +121,9 @@ bunx oh-my-opencode-slim@latest --version
 ### Plugin Configuration
 
 Plugin configs are deployed to `~/.config/opencode/`:
-- `opencode-auto-fallback` → `fallback.json`
-- `oh-my-opencode-slim` → `oh-my-opencode-slim.json`
-- `opencode-plugin-openspec` → integrated into agent prompts
+- `opencode-auto-fallback` &rarr; `fallback.json`
+- `oh-my-opencode-slim` &rarr; `oh-my-opencode-slim.json`
+- `opencode-plugin-openspec` &rarr; integrated into agent prompts
 
 ## Agents
 
@@ -131,33 +131,80 @@ Plugin configs are deployed to `~/.config/opencode/`:
 
 | Agent | Description | Model | Variant | Fallback Chain |
 |-------|-------------|-------|---------|----------------|
-| **build** | Full development with all tools | **Kimi K2.6** | medium | Gemini → DeepSeek → GLM-5.1 |
-| **research** | Literature research & paper analysis | **Kimi K2.6** | medium | Gemini → DeepSeek → GLM-5.1 |
-| **plan** | Analysis & planning (no changes) | **Kimi K2.6** | high | Gemini → DeepSeek → GLM-5 |
+| **build** | Full development with all tools | **Kimi K2.7** | medium | K2.7 &rarr; DeepSeek Chat &rarr; K2.6 &rarr; K2.5 &rarr; Qwen3.6 |
+| **research** | Literature research & paper analysis | **Kimi K2.7** | medium | K2.7 &rarr; DeepSeek Chat &rarr; K2.6 &rarr; K2.5 &rarr; Qwen3.6 |
+| **plan** | Analysis & planning (no changes) | **Kimi K2.7** | high | K2.7 (high) &rarr; DeepSeek Reasoner &rarr; K2.6 &rarr; K2.5 (high) &rarr; Qwen3.6 |
 
 ### Subagents (@ to invoke)
 
 | Agent | Description | Model | Variant | Fallback Chain |
 |-------|-------------|-------|---------|----------------|
-| **coder** | Complex programming tasks | **Kimi K2.6** | medium | Gemini → DeepSeek → GLM-5.1 |
-| **clean-coder** | TDD-focused clean code | **Kimi K2.6** | medium | GLM-5.1 → Gemini |
-| **code-reviewer** | Quality & security review | **Kimi K2.6** | high | GLM-5.1 → Gemini |
-| **beagle** | Web research & fact-checking | **Gemini 2.5 Flash** | — | Kimi → GLM-5.1 |
-| **paper-analyst** | Download & analyze papers | **DeepSeek Chat** | — | Kimi → Gemini → DeepSeek-v4 |
-| **researcher** | Deep literature research | **Kimi K2.6** | high | Gemini → DeepSeek |
-| **architect** | Solution architecture | **Gemini 2.5 Pro** | — | DeepSeek → GLM-5 → Kimi |
-| **writer** | Multilingual writing | **Gemini 2.5 Pro** | — | GLM-5 → Kimi |
-| **data-scientist** | Data analysis & visualization | **DeepSeek Reasoner** | — | Gemini → Qwen → Kimi |
+| **coder** | Complex programming tasks | **Kimi K2.7** | medium | K2.7 &rarr; DeepSeek Chat &rarr; K2.6 &rarr; K2.5 &rarr; Qwen3.6 |
+| **clean-coder** | TDD-focused clean code | **Kimi K2.7** | medium | K2.7 &rarr; DeepSeek Chat &rarr; K2.6 &rarr; K2.5 &rarr; Qwen3.6 |
+| **code-reviewer** | Quality & security review | **Kimi K2.7** | high | K2.7 (high) &rarr; DeepSeek Chat &rarr; K2.6 &rarr; K2.5 (high) &rarr; Qwen3.6 |
+| **beagle** | Web research & fact-checking | **MiMo-V2.5** | — | DeepSeek Chat &rarr; K2.7 (low) &rarr; MiMo-V2.5 |
+| **paper-analyst** | Download & analyze papers | **DeepSeek Chat** | — | K2.7 &rarr; DeepSeek Chat &rarr; K2.6 &rarr; Qwen3.6 |
+| **researcher** | Deep literature research | **Kimi K2.7** | high | K2.7 (high) &rarr; DeepSeek Chat &rarr; K2.6 &rarr; K2.5 (high) &rarr; Qwen3.6 |
+| **architect** | Solution architecture | **DeepSeek Reasoner** | — | K2.7 (high) &rarr; DeepSeek Reasoner &rarr; K2.6 &rarr; K2.5 (high) |
+| **writer** | Multilingual writing | **Kimi K2.7** | — | K2.7 &rarr; DeepSeek Chat &rarr; MiMo-V2.5 |
+| **data-scientist** | Data analysis & visualization | **DeepSeek Reasoner** | — | K2.7 (high) &rarr; DeepSeek Chat &rarr; K2.6 &rarr; K2.5 (high) |
 
-> **Note**: Model paths use `kimi-for-coding-oauth/k2p6` for Kimi models (OAuth provider) and built-in prefixes (`google/`, `deepseek/`, `opencode-go/`) for others.
+> **Note**: Model paths use `kimi-for-coding-oauth/k2p7` for Kimi models (OAuth provider) and built-in prefixes (`opencode/`, `deepseek/`) for others.
+
+### Cavecrew Subagents (@cavecrew to invoke)
+
+Compressed-output subagents that return ~60% smaller responses, preserving context in long sessions. Cavecrew agents speak caveman-style by default.
+
+| Agent | Role | Trigger |
+|-------|------|---------|
+| **@cavecrew-investigator** | Locate code, find files, grep codebase | "find where X is defined" |
+| **@cavecrew-builder** | 1-2 file scoped edits | "fix this bug in file Y" |
+| **@cavecrew-reviewer** | Diff review, one-line comments | "review this PR" |
+
+Use cavecrew when: main context is running long, or you need fast reconnaissance without verbose output. Main thread output stays caveman-compressed.
 
 ## Agent Orchestration
 
 Primary agents can delegate to subagents:
 
-- **build** → `clean-coder`, `code-reviewer`, `beagle`, `architect`, `writer`
-- **research** → `beagle`, `paper-analyst`, `researcher`, `data-scientist`, `writer`
-- **plan** → `architect`, `beagle`
+- **build** &rarr; `clean-coder`, `code-reviewer`, `beagle`, `architect`, `writer`, `cavecrew-builder`, `cavecrew-investigator`
+- **research** &rarr; `beagle`, `paper-analyst`, `researcher`, `data-scientist`, `writer`, `cavecrew-investigator`
+- **plan** &rarr; `architect`, `beagle`, `cavecrew-investigator`
+
+## Pantheon Agents (via oh-my-opencode-slim)
+
+The Pantheon provides 8 specialized agents that auto-delegate via **@orchestrator**:
+
+| Agent | Role | When to Use |
+|-------|------|-------------|
+| **@orchestrator** | Master delegator | Complex multi-step tasks requiring coordination |
+| **@explorer** | Codebase reconnaissance | Deep codebase exploration and understanding |
+| **@oracle** | Strategic advisor | Architecture decisions, hard debugging, trade-offs |
+| **@council** | Multi-LLM consensus | When you need diverse perspectives |
+| **@librarian** | Knowledge retrieval | Documentation lookup and research |
+| **@designer** | UI/UX implementation | Frontend and visual work |
+| **@fixer** | Fast implementation | Routine, scoped coding tasks |
+| **@observer** | Visual analysis | Images, screenshots, PDFs |
+
+### Pantheon Usage
+
+```bash
+# Orchestrator auto-delegates based on task
+@orchestrator implement user authentication
+
+# Manual delegation to specific agents
+@explorer analyze this codebase structure
+@oracle compare microservices vs monolith
+@council evaluate these two approaches
+```
+
+### Presets
+
+Switch between model presets at runtime:
+```bash
+/preset              # Show available presets
+/preset custom       # Use custom preset (kimi/deepseek/gemini)
+```
 
 ## Auto-Fallback Plugin
 
@@ -167,10 +214,10 @@ The `opencode-auto-fallback` plugin provides automatic model switching when APIs
 
 ```
 Primary model fails (rate limit, quota, error)
-  → Retry with exponential backoff (2s → 4s → 8s)
-  → If still failing → try fallback_models[0]
-    → If that fails → fallback_models[1] → ...
-      → All exhausted → surface error to user
+  &rarr; Retry with exponential backoff (2s &rarr; 4s &rarr; 8s)
+  &rarr; If still failing &rarr; try fallback_models[0]
+    &rarr; If that fails &rarr; fallback_models[1] &rarr; ...
+      &rarr; All exhausted &rarr; surface error to user
 ```
 
 ### Features
@@ -178,7 +225,7 @@ Primary model fails (rate limit, quota, error)
 - **Two-tier error handling** — Immediate fallback for auth/quota, backoff retry for transient errors
 - **Per-agent chains** — Each agent has its own ordered fallback list
 - **Provider diversity** — Falls back to different providers, not just different models
-- **Cooldown & recovery** — Failed models enter cooldown, auto-switch back when recovered
+- **Cooldown & recovery** — Failed models enter cooldown (30s default), auto-switch back when recovered
 - **Large context fallback** — Automatically switches to bigger context models when window fills up
 - **TTFT timeout** — Aborts hung models, never interrupts actively streaming ones
 
@@ -189,20 +236,16 @@ Plugin config is in `config/fallback.json`:
 ```json
 {
   "enabled": true,
-  "cooldownMs": 120000,
-  "maxRetries": 3,
-  "logging": true,
-  "largeContextFallback": {
-    "agents": ["build", "coder", "research", "clean-coder", "paper-analyst"],
-    "model": "deepseek/deepseek-chat"
-  }
+  "cooldownMs": 30000,
+  "maxRetries": 1,
+  "logging": true
 }
 ```
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `cooldownMs` | 120000 | Cooldown after failure (2 min for rate limits) |
-| `maxRetries` | 3 | Backoff retries before fallback chain |
+| `cooldownMs` | 30000 | Cooldown after failure (30s for rate limits) |
+| `maxRetries` | 1 | Backoff retries before fallback chain |
 | `logging` | true | Log fallback events to `~/.local/share/opencode/log/fallback.log` |
 
 ## TUI Configuration
@@ -273,13 +316,13 @@ Vim-centric keybinds optimized for tmux users. Config in `config/tui.json`.
 lsp_get_server_capabilities
 
 # Go to definition
-lsp_go_to_definition file="src/main.py" line=10 column=5
+lsp_go_to_definition file_path="src/main.py" line=10 column=5
 
 # Get diagnostics
-lsp_get_diagnostics file="src/main.py"
+lsp_get_diagnostics file_path="src/main.py"
 
 # Format document
-lsp_format_document file="src/main.py"
+lsp_format_document file_path="src/main.py"
 ```
 
 #### AiDex (Code Index)
@@ -338,34 +381,48 @@ fetch_fetch url="https://example.com" max_length=5000
 
 ## Skills
 
-### Lazy-Loaded Skills (219 skills)
+### Lazy-Loaded Skills (104 curated skills)
 
 Skills are organized into **lazy-loaded** (on-demand) and **globally loaded** (always available):
 
-**`lazy-skills/`** (219 skills) — Loaded on-demand via `skill_find` and `skill_use`:
-- Scientific computing (bioinformatics, chemistry, astronomy)
-- Data analysis (pandas, polars, dask, vaex)
-- Machine learning (scikit-learn, pytorch, transformers)
-- Visualization (matplotlib, seaborn, plotly)
+ **`lazy-skills/`** (104 curated skills) — Loaded on-demand via `skill_find` and `skill_use`:
+- Research & papers (arxiv, arxiv-to-md, perplexity, openalex, literature-review)
+- Machine learning (scikit-learn, pytorch, transformers, stable-baselines3)
+- Data engineering (polars, dask, vaex, zarr-python)
+- Visualization (matplotlib, seaborn, plotly, infographics)
 - OpenSpec workflow skills (openspec-explore, openspec-new-change, etc.)
 - And many more...
 
-**`skills/global/`** (7 skills) — Always loaded:
+**`skills/global/`** (13 skills) — Always loaded:
+- caveman — Token compression (always-on, all agents)
+- caveman-commit — Conventional commit messages
+- caveman-review — Compressed PR reviews
+- caveman-compress — Memory file compression
+- caveman-stats — Token usage statistics
+- caveman-help — Caveman command reference
+- cavecrew — Subagent delegation guide
 - deepthink — Structured reasoning
 - python-design-patterns — Architecture patterns
 - python-qa — Code quality
 - software-architecture — Design decisions
 - decision-critic — Validation
 - content-humanizer — Writing style
-- caveman — Token compression (always-on, all agents)
+
+**`skills/agents/`** (20 skills) — Agent-specific lazy-loaded skills:
+- OpenSpec workflow skills (explore, new-change, apply-change, verify-change, etc.)
+- Architecture decision records
+- PDF-to-markdown, drawio diagrams, infographics
+- And more...
 
 ### Using Skills
 
-Agents discover and load skills automatically:
+Agents discover and load skills automatically. Each skill has `tags` in its frontmatter for better discoverability:
 
 ```bash
-# Find skills by keyword
+# Find skills by keyword (searches name, description, and tags)
 skill_find('data visualization')
+skill_find('foundation models')
+skill_find('arxiv papers')
 
 # Load specific skills
 skill_use(['seaborn', 'matplotlib'])
@@ -390,10 +447,11 @@ All agents use **caveman-style communication** by default. This cuts ~65-75% of 
 | Skill | Command | Purpose |
 |---|---|---|
 | **caveman** | (always on) | Compress all agent output to terse, accurate prose |
-| **caveman-commit** | `/caveman-commit` | Conventional Commits, ≤50 char subject. Why over what. |
-| **caveman-review** | `/caveman-review` | One-line PR comments: `L42: 🔴 bug: user null. Add guard.` |
+| **caveman-commit** | `/caveman-commit` | Conventional Commits, &le;50 char subject. Why over what. |
+| **caveman-review** | `/caveman-review` | One-line PR comments: `L42: bug: user null. Add guard.` |
 | **caveman-compress** | `/caveman-compress <file>` | Rewrite memory files to caveman-speak. Cuts ~46% input tokens. |
 | **caveman-stats** | `/caveman-stats` | Session token usage + lifetime savings + USD. |
+| **caveman-help** | `/caveman-help` | Quick reference card for all caveman modes. |
 
 ### Caveman Intensity Levels
 
@@ -407,41 +465,6 @@ All agents use **caveman-style communication** by default. This cuts ~65-75% of 
 | **wenyan-ultra** | Extreme abbreviation, classical Chinese feel. |
 
 Auto-clarity: caveman temporarily pauses for security warnings, irreversible actions, or when user asks for clarification. Resumes after.
-
-## Pantheon Agents (via oh-my-opencode-slim)
-
-The Pantheon provides 8 specialized agents that auto-delegate via **@orchestrator**:
-
-| Agent | Role | When to Use |
-|-------|------|-------------|
-| **@orchestrator** | Master delegator | Complex multi-step tasks requiring coordination |
-| **@explorer** | Codebase reconnaissance | Deep codebase exploration and understanding |
-| **@oracle** | Strategic advisor | Architecture decisions, hard debugging, trade-offs |
-| **@council** | Multi-LLM consensus | When you need diverse perspectives |
-| **@librarian** | Knowledge retrieval | Documentation lookup and research |
-| **@designer** | UI/UX implementation | Frontend and visual work |
-| **@fixer** | Fast implementation | Routine, scoped coding tasks |
-| **@observer** | Visual analysis | Images, screenshots, PDFs |
-
-### Usage
-
-```bash
-# Orchestrator auto-delegates based on task
-@orchestrator implement user authentication
-
-# Manual delegation to specific agents
-@explorer analyze this codebase structure
-@oracle compare microservices vs monolith
-@council evaluate these two approaches
-```
-
-### Presets
-
-Switch between model presets at runtime:
-```bash
-/preset              # Show available presets
-/preset custom       # Use custom preset (kimi/deepseek/gemini)
-```
 
 ## OpenSpec Workflow (via opencode-plugin-openspec)
 
@@ -474,12 +497,12 @@ Copy `.env.example` to `~/.config/opencode/.env` and configure:
 # Required
 OPENAI_API_KEY=your-opencodego-key
 MOONSHOT_API_KEY=your-moonshot-key
-GEMINI_API_KEY=your-gemini-key
 DEEPSEEK_API_KEY=your-deepseek-key
 
 # Optional
 GITHUB_TOKEN=your-github-token
 GOOGLE_API_KEY=your-google-key
+GOOGLE_SEARCH_ENGINE_ID=your-search-engine-id
 ```
 
 ### Agent Configuration
@@ -509,15 +532,19 @@ Agent instructions here...
 ```bash
 make all                # Full setup and deployment
 make setup              # Create directories
-make skills-deploy      # Deploy lazy-loaded and global skills
+make skills-deploy      # Deploy all skills (lazy + global)
 make lazy-skills-deploy # Deploy lazy-loaded skills only
-make global-skills-deploy # Deploy global skills only
+make global-skills-deploy # Deploy globally loaded skills only
+make caveman-deploy     # Deploy caveman skills only
 make agents             # Deploy agent configurations
 make deploy             # Deploy configuration files
 make plugins            # Show plugin installation commands
 make install            # Full installation with next steps
 make validate           # Validate all JSON configs
-make test               # Validate configuration
+make validate-yaml      # Validate YAML frontmatter in SKILL.md files
+make test               # Run validation tests
+make test-skills        # Validate all skill YAML frontmatter and structure
+make test-skill NAME=... # Test a specific skill
 make clean              # Remove deployed configs
 make help               # Show all targets
 ```
@@ -528,12 +555,16 @@ make help               # Show all targets
 opencode-agents/
 ├── Makefile                          # Main orchestrator
 ├── README.md                         # This file
+├── VERSION                           # Version tag (1.0.0)
 ├── .env.example                      # API key template
-├── lazy-skills/                      # 219 lazy-loaded skills
+├── logo.svg                          # Project logo
+├── lazy-skills/                      # 104 curated lazy-loaded skills
 ├── skills/
-│   ├── global/                       # 6 always-loaded skills
+│   ├── global/                       # 13 always-loaded skills
+│   ├── agents/                       # 20 agent-specific skills
+│   ├── awesome/                      # Skill collection
 │   └── registry.json                 # Skill-to-agent mappings
-├── agents/                           # 12 agent definitions
+├── agents/                           # 15 agent definitions
 │   ├── build.md                      # Primary: Development
 │   ├── research.md                   # Primary: Research
 │   ├── plan.md                       # Primary: Planning
@@ -545,14 +576,26 @@ opencode-agents/
 │   ├── researcher.md                 # Subagent: Literature
 │   ├── architect.md                  # Subagent: Architecture
 │   ├── writer.md                     # Subagent: Writing
-│   └── data-scientist.md             # Subagent: Data Science
+│   ├── data-scientist.md             # Subagent: Data Science
+│   └── cavecrew/                     # Subagent: Compressed delegation
+│       ├── cavecrew-builder.md
+│       ├── cavecrew-investigator.md
+│       └── cavecrew-reviewer.md
 ├── config/
 │   ├── opencode.json                 # Main configuration
 │   ├── tui.json                      # TUI keybinds
 │   ├── fallback.json                 # Auto-fallback plugin config
 │   └── oh-my-opencode-slim.json      # Pantheon agent presets
+├── docs/
+│   └── PLUGIN_GUIDE.md               # Detailed plugin setup guide
 ├── scripts/
-│   └── deploy.sh                     # Deploy configs to ~/.config/opencode/
+│   ├── deploy.sh                     # Deploy configs to ~/.config/opencode/
+│   ├── setup-skills.sh              # Skill setup helper
+│   ├── sync-agents-to-project.sh    # Sync agent configs to project
+│   ├── test-skill.sh                # Test a specific skill
+│   ├── test-skills.sh               # Test all skills
+│   ├── substitute_env_in_json.py     # JSON env substitution
+│   └── validate-skills-yaml.py      # YAML validation
 └── lazy.config.json                  # Lazy-loading configuration
 ```
 
@@ -598,6 +641,14 @@ Implement a caching layer for the API
 @clean-coder refactor for testability
 ```
 
+### Using Cavecrew for Long Sessions
+```
+# When context gets long, delegate to cavecrew
+@cavecrew-investigator find all references to UserService
+@cavecrew-builder fix the null pointer in src/auth.ts
+@cavecrew-reviewer review the diff in PR #42
+```
+
 ## Updating
 
 Update submodules:
@@ -621,7 +672,7 @@ make skills
 ### Model fallback triggered constantly
 1. Check `~/.local/share/opencode/log/fallback.log` for fallback events
 2. Verify API keys for all providers in `~/.config/opencode/.env`
-3. Check if a provider is in cooldown (2 min default)
+3. Check if a provider is in cooldown (30s default)
 
 ### Skills not found
 1. Run `make skills-deploy` to deploy skills

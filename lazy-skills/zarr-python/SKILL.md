@@ -4,6 +4,7 @@ description: Chunked N-D arrays for cloud storage. Compressed arrays, parallel I
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [arrays, storage, compression, chunked, N-dimensional]
 ---
 
 # Zarr Python

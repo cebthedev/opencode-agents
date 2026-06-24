@@ -4,6 +4,7 @@ description: Creative research ideation and exploration. Use for open-ended brai
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [ideas, creativity, research, innovation]
 ---
 
 # Scientific Brainstorming

@@ -1,6 +1,7 @@
 ---
 name: planning
 description: Create an implementation plan from a feature specification, with traceability checkpoint generation.
+tags: [planning, strategy, organization]
 ---
 ## User Input
 

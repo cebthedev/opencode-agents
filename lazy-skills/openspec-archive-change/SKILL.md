@@ -7,6 +7,7 @@ metadata:
   author: openspec
   version: "1.0"
   generatedBy: "1.0.2"
+tags: [archive, history, workflow, change]
 ---
 
 Archive a completed change in the experimental workflow.

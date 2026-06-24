@@ -4,6 +4,7 @@ description: Work with Data Commons, a platform providing programmatic access to
 license: Unknown
 metadata:
     skill-author: K-Dense Inc.
+tags: [data, API, statistics, Google-Data-Commons]
 ---
 
 # Data Commons Client

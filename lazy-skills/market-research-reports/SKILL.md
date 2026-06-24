@@ -5,6 +5,7 @@ allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [market-research, reports, business, analysis]
 ---
 
 # Market Research Reports

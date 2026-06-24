@@ -4,6 +4,7 @@ description: Multiagent AI system for scientific research assistance that automa
 license: GPL-3.0 license
 metadata:
     skill-author: K-Dense Inc.
+tags: [research, multi-agent, automation, publication, workflow]
 ---
 
 # Denario

@@ -7,6 +7,7 @@ metadata:
   author: openspec
   version: "1.0"
   generatedBy: "1.0.2"
+tags: [sync, specifications, workflow, consistency]
 ---
 
 Sync delta specs from a change to main specs.

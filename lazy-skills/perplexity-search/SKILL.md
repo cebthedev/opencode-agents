@@ -5,6 +5,7 @@ license: MIT license
 compatibility: An OpenRouter API key is required to use Perplexity search
 metadata:
     skill-author: K-Dense Inc.
+tags: [search, web, research, AI, answers]
 ---
 
 # Perplexity Search

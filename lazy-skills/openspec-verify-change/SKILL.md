@@ -7,6 +7,7 @@ metadata:
   author: openspec
   version: "1.0"
   generatedBy: "1.0.2"
+tags: [validation, testing, workflow, quality]
 ---
 
 Verify that an implementation matches the change artifacts (specs, tasks, design).

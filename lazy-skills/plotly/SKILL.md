@@ -4,6 +4,7 @@ description: Interactive visualization library. Use when you need hover info, zo
 license: MIT license
 metadata:
     skill-author: K-Dense Inc.
+tags: [interactive, visualization, dashboards, web, charts]
 ---
 
 # Plotly
