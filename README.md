@@ -57,10 +57,9 @@ make install-cli
 # Option B — PATH entry in ~/.zshrc instead
 export PATH="$HOME/Projects/opencode-agents/bin:$PATH"
 
-# Option C — Homebrew (fresh laptop; needs a local tap, see below)
-brew tap-new cebthedev/oa --no-git
-ln -sf "$PWD/packaging/homebrew/oa.rb" "$(brew --repo cebthedev/oa)/Formula/oa.rb"
-brew install cebthedev/oa/oa
+# Option C — Homebrew (fresh laptop; published tap)
+brew tap cebthedev/oa
+brew install oa
 ```
 
 ### New Laptop Bootstrap
@@ -69,7 +68,7 @@ brew install cebthedev/oa/oa
 # 1. Get the repo
 git clone git@github.com:cebthedev/opencode-agents.git ~/Projects/opencode-agents
 cd ~/Projects/opencode-agents
-# (or skip the clone: run the Option C tap commands anywhere)
+# (or skip the clone entirely: brew tap cebthedev/oa && brew install oa)
 
 # 2. oa on PATH
 make install-cli
@@ -82,13 +81,13 @@ bunx oh-my-opencode-slim@latest install
 npm install -g opencode-auto-fallback
 ```
 
-Brew notes: modern Homebrew rejects `brew install ./formula.rb` — the formula
-must live in a tap, hence the `tap-new` + symlink dance above. The formula
-installs the whole repo as a keg (registry, skills, configs included) and
-vendors PyYAML in a private venv (there is no Homebrew `pyyaml` formula).
-Update it with `brew reinstall cebthedev/oa/oa`. For a private repo, git must
-be able to fetch the URL. Option A is better while you're iterating on
-bundles — a brew keg freezes until you reinstall.
+Brew notes: the formula lives in the [homebrew-oa](https://github.com/cebthedev/homebrew-oa)
+tap and builds from this repo's `main` branch. It installs the whole repo as
+a keg (registry, skills, configs included) and vendors PyYAML in a private
+venv (there is no Homebrew `pyyaml` formula). Update it with
+`brew reinstall oa`. For a private repo, git must be able to fetch the URL.
+Option A is better while you're iterating on bundles — a brew keg freezes
+until you reinstall.
 
 ### Per-Project Setup
 

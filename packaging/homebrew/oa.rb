@@ -1,12 +1,9 @@
 # Homebrew formula for oa.
 #
-# Modern Homebrew rejects `brew install ./path/to.rb` — the formula must live
-# in a tap. Local tap (one-time setup):
-#   brew tap-new cebthedev/oa --no-git
-#   ln -sf <repo>/packaging/homebrew/oa.rb "$(brew --repo cebthedev/oa)/Formula/oa.rb"
-#   brew install cebthedev/oa/oa
+# Published tap: https://github.com/cebthedev/homebrew-oa
+#   brew tap cebthedev/oa && brew install oa
+# Builds from the source repo's main branch; update with `brew reinstall oa`.
 # For a private repo, ensure `git` can fetch the URL (SSH agent / credential helper).
-# Updates: brew reinstall cebthedev/oa/oa   (git url refetches the branch)
 class Oa < Formula
   desc "Bundle-based skill/MCP loader for OpenCode and other AI coding agents"
   homepage "https://github.com/cebthedev/opencode-agents"
