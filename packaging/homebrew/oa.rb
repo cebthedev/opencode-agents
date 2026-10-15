@@ -18,7 +18,8 @@ class Oa < Formula
 
   def install
     # oa needs its DB (registry/), the skill pools, agent defs and configs.
-    prefix.install %w[oa registry lazy-skills skills agents config scripts bin docs]
+    # NB: repo bin/ is NOT installed — the wrapper written below replaces it.
+    prefix.install %w[oa registry lazy-skills skills agents config scripts docs]
 
     # pyyaml is pip-only (no Homebrew formula): vendor it in a private venv.
     venv = libexec/"venv"
