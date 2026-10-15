@@ -123,13 +123,16 @@ plugins: ## Install and update OpenCode plugins
 	@echo "  - @tarquinen/opencode-dcp"
 	@echo "$(GREEN)✓ Plugin references updated!$(RESET)"
 
-validate: validate-yaml ## Validate all configs and skill YAML frontmatter
+validate: validate-yaml validate-registry ## Validate all configs, registry, and skill YAML frontmatter
 	@echo "$(BLUE)Validating JSON configs...$(RESET)"
 	@python3 -c "import json; json.load(open('config/opencode.json'))" && echo "  $(GREEN)✓ opencode.json$(RESET)"
 	@python3 -c "import json; json.load(open('config/tui.json'))" && echo "  $(GREEN)✓ tui.json$(RESET)"
 	@python3 -c "import json; json.load(open('config/fallback.json'))" && echo "  $(GREEN)✓ fallback.json$(RESET)"
-	@python3 -c "import json; json.load(open('lazy.config.json'))" && echo "  $(GREEN)✓ lazy.config.json$(RESET)"
 	@echo "$(GREEN)All configs valid!$(RESET)"
+
+validate-registry: ## Lint registry: bundle refs, manifests, fallback models
+	@echo "$(BLUE)Validating registry + fallback...$(RESET)"
+	@python3 scripts/validate-registry.py
 
 validate-yaml: ## Validate YAML frontmatter in SKILL.md files
 	@echo "$(BLUE)Validating SKILL.md YAML frontmatter...$(RESET)"

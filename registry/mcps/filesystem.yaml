@@ -1,8 +1,9 @@
 name: filesystem
 type: mcp
-description: File operations outside the workspace. NOTE: original config had
-  no allowed-directory arg — add one before use (e.g. args: [...,.]).
-  Not assigned to any bundle; enable per-project by adding to .oa.yaml flow.
+description: >-
+  File operations outside the workspace. NOTE: original config had no
+  allowed-directory arg — add one before use. Not assigned to any bundle;
+  enable per-project when needed.
 transport: local
 command: [npx, -y, "@modelcontextprotocol/server-filesystem"]
 source: https://github.com/modelcontextprotocol/servers

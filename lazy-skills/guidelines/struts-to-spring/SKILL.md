@@ -1,3 +1,9 @@
+---
+name: struts-to-spring
+description: Migration guideline from Apache Struts 2 to Spring Boot 3.x.
+  Trigger when working with struts.xml, ActionSupport, xwork2, struts-tags.
+---
+
 # Struts 2 to Spring Boot 3.x Migration Guideline
 
 ## Metadata
