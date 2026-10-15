@@ -1,5 +1,9 @@
 description: Infra, CI/CD, containers, terraform, ops hygiene.
 skills:
+  - openspec-explore
+  - openspec-new-change
+  - openspec-apply-change
+  - openspec-verify-change
   - codebase-analysis
   - architecture-decision-records
   - cc-history

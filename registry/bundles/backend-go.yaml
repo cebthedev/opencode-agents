@@ -1,5 +1,9 @@
 description: Go backend work. API design, implementation discipline, specs.
 skills:
+  - openspec-explore
+  - openspec-new-change
+  - openspec-apply-change
+  - openspec-verify-change
   - codebase-analysis
   - implement
   - specification

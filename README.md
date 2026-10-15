@@ -479,7 +479,7 @@ skills:
 Skills, MCPs, plugins, and subagents are grouped into use-case bundles:
 ```
 registry/
-├── bundles/    # base, backend-go, fullstack, devops, research, data
+├── bundles/    # base, backend-go, fullstack, devops, research, data, openspec
 ├── mcps/       # MCP server manifests (13, incl. opt-in filesystem)
 └── plugins/    # CLI tools/plugins (opencode-vim, openspec)
 ```
@@ -517,7 +517,16 @@ Auto-clarity: caveman temporarily pauses for security warnings, irreversible act
 
 ## OpenSpec Workflow (via opencode-plugin-openspec)
 
-Structured workflow for planning and implementation:
+Structured workflow for planning and implementation. The `openspec` bundle
+ships the full lifecycle (14 skills); dev bundles (backend-go, devops,
+fullstack) include the core loop automatically:
+
+```bash
+oa use openspec        # full lifecycle + intent-driven extras, per project
+openspec init          # required: activates the plugin's openspec-plan agent
+```
+
+Core loop:
 
 ```bash
 # 1. Explore and clarify requirements
@@ -535,6 +544,22 @@ openspec-verify-change
 # 5. Resume existing work
 openspec-continue-change
 ```
+
+Intent-driven extras (in the `openspec` bundle, per
+[intent-driven.dev](https://intent-driven.dev/blog/2026/05/10/spec-driven-development-openspec-opencode/)):
+
+- **grill-me** — interrogate the plan one question at a time before proposal
+- **c4-diagrams** — architecture diagrams (ASCII/Mermaid) before detailed design
+- **openspec-git-discipline** — every state change crosses `main` before the next phase
+- **openspec-bulk-apply-change** — parallel apply in isolated worktrees
+
+The `intent-driven` schema (proposal → specs → design → adr → tasks) is
+vendored at `openspec-schemas/intent-driven/` — copy it into a project's
+`openspec/schemas/` and select it in `openspec/config.yaml`. See
+[docs/PLUGIN_GUIDE.md](docs/PLUGIN_GUIDE.md) for the full setup.
+
+Note: the plugin only registers its `openspec-plan` agent in projects that
+have been `openspec init`'d (it detects `openspec/config.yaml`).
 
 ## Configuration
 
@@ -625,7 +650,7 @@ opencode-agents/
 ├── oa/
 │   └── cli.py                        # oa implementation
 ├── registry/                         # oa DB: bundles, MCP + plugin manifests
-│   ├── bundles/                      # base, backend-go, fullstack, devops, research, data
+│   ├── bundles/                      # base, backend-go, fullstack, devops, research, data, openspec
 │   ├── mcps/                         # 13 MCP server manifests
 │   └── plugins/                      # opencode-vim, openspec, codegraph
 ├── lazy-skills/                      # 100+ curated on-demand skills

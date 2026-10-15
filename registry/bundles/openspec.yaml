@@ -1,0 +1,18 @@
+description: Spec-driven development workflow. Full OpenSpec lifecycle + intent-driven schema skills. Use per project doing propose/apply/archive.
+skills:
+  - openspec-explore
+  - openspec-new-change
+  - openspec-apply-change
+  - openspec-verify-change
+  - openspec-continue-change
+  - openspec-archive-change
+  - openspec-bulk-archive-change
+  - openspec-bulk-apply-change
+  - openspec-ff-change
+  - openspec-onboard
+  - openspec-sync-specs
+  - grill-me
+  - c4-diagrams
+  - openspec-git-discipline
+plugins:
+  - openspec

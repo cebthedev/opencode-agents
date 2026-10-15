@@ -1,5 +1,9 @@
 description: Full stack web work. Frontend + backend + planning + diagrams.
 skills:
+  - openspec-explore
+  - openspec-new-change
+  - openspec-apply-change
+  - openspec-verify-change
   - implement
   - planner
   - specification

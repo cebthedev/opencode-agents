@@ -90,15 +90,39 @@ opencode plugin list | grep openspec
 ```
 
 **What it does:**
+- Registers the `openspec-plan` agent — **only in projects that have been
+  `openspec init`'d** (it detects `openspec/config.yaml` or `openspec/AGENTS.md`)
+
+**Skills** (synced by `oa use`, not by the plugin):
 - `openspec-explore` — Clarify requirements before planning
 - `openspec-new-change` — Create structured change artifacts
 - `openspec-apply-change` — Implement step-by-step from specs
 - `openspec-verify-change` — Validate implementation matches plan
 - `openspec-continue-change` — Resume existing work
+- Dev bundles carry the core loop; `oa use openspec` adds the full 14-skill
+  lifecycle (archive, bulk apply/archive, ff-change, onboard, sync-specs)
 
 **Usage workflow:**
 ```
 openspec-explore → openspec-new-change → openspec-apply-change → openspec-verify-change
+```
+
+**Intent-driven setup** (per project, from
+[intent-driven.dev](https://intent-driven.dev/blog/2026/05/10/spec-driven-development-openspec-opencode/)):
+
+```bash
+openspec init     # then pick new/continue/verify + other commands beyond core
+oa use openspec   # syncs grill-me, c4-diagrams, openspec-git-discipline, openspec-bulk-apply-change
+```
+
+The `intent-driven` schema (proposal → specs → design → adr → tasks) is
+vendored in this repo at `openspec-schemas/intent-driven/`. Install it into
+the project:
+
+```bash
+mkdir -p openspec/schemas
+cp -R <this-repo>/openspec-schemas/intent-driven openspec/schemas/
+# then set `schema: intent-driven` (or select at next `openspec` run) in openspec/config.yaml
 ```
 
 ### 4. opencode-kimi-full
