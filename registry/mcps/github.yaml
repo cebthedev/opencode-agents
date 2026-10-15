@@ -1,0 +1,6 @@
+name: github
+type: mcp
+description: GitHub API — issues, PRs, repos, code search. Needs GITHUB_TOKEN.
+transport: local
+command: [npx, -y, "@modelcontextprotocol/server-github"]
+source: https://github.com/modelcontextprotocol/servers

@@ -14,7 +14,7 @@
         ]
       },
       "oracle": {
-        "model": "deepseek/deepseek-reasoner",
+        "model": "kimi-for-coding-oauth/k2p7",
         "variant": "high",
         "skills": [
           "simplify"
@@ -22,7 +22,7 @@
         "mcps": []
       },
       "council": {
-        "model": "deepseek/deepseek-reasoner",
+        "model": "kimi-for-coding-oauth/k2p7",
         "variant": "high",
         "skills": [],
         "mcps": []
@@ -39,6 +39,7 @@
       },
       "explorer": {
         "model": [
+          "kimi-for-coding-oauth/k2p6",
           "opencode/deepseek-v4-flash-free",
           "opencode/mimo-v2.5-free",
           "opencode/qwen3.6-plus-free",
@@ -60,7 +61,7 @@
         "mcps": []
       },
       "fixer": {
-        "model": "opencode/deepseek-v4-flash-free",
+        "model": "kimi-for-coding-oauth/k2p7",
         "variant": "medium",
         "skills": [],
         "mcps": []

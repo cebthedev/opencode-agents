@@ -53,3 +53,7 @@ papers/
 ~/.arxiv-mcp-server/
 .aidex
 *.backup.*
+
+# oa generated artifacts (when oa is run inside this repo)
+/.oa.yaml
+/opencode.json

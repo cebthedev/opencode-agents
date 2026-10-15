@@ -1,0 +1,6 @@
+name: fetch
+type: mcp
+description: Fetch and convert web pages to markdown for LLM consumption.
+transport: local
+command: [uvx, mcp-server-fetch]
+source: https://github.com/modelcontextprotocol/servers

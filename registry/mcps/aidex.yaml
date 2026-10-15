@@ -1,0 +1,6 @@
+name: aidex
+type: mcp
+description: Local code search/index over the workspace (.aidex index).
+transport: local
+command: [aidex]
+source: unverified — binary-only, no public repo confirmed

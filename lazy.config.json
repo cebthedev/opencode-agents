@@ -1,6 +1,0 @@
-{
-  "debug": false,
-  "basePaths": ["~/.config/opencode/skills", "~/.config/opencode/lazy-skills"],
-  "promptRenderer": "xml",
-  "modelRenderers": {}
-}

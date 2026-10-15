@@ -1,0 +1,7 @@
+name: lsp
+type: mcp
+description: Language-server powered code intelligence — go-to-definition,
+  references, diagnostics via gopls/ts/pyright/rust-analyzer/clangd.
+transport: local
+command: [agent-lsp, "go:gopls", "typescript:typescript-language-server,--stdio", "python:pyright-langserver,--stdio", "rust:rust-analyzer", "c:clangd", "cpp:clangd"]
+source: https://github.com/terminalsandcoffee/agent-lsp

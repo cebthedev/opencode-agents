@@ -1,0 +1,6 @@
+name: jupyter
+type: mcp
+description: Run code in Jupyter kernels — execute cells, manage notebooks.
+transport: local
+command: [uvx, jupyter-mcp-server@latest]
+source: unverified

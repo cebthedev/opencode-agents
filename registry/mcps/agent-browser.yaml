@@ -1,0 +1,6 @@
+name: agent-browser
+type: mcp
+description: Browser automation for agents — navigate, scrape, interact with pages.
+transport: local
+command: [agent-browser, mcp]
+source: https://github.com/vercel-labs/agent-browser

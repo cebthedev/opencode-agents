@@ -1,0 +1,6 @@
+name: arxiv-mcp-server
+type: mcp
+description: Search and download arXiv papers to local storage.
+transport: local
+command: [uv, tool, run, arxiv-mcp-server, --storage-path, ~/.arxiv-mcp-server/papers]
+source: https://github.com/blazickjp/arxiv-mcp-server

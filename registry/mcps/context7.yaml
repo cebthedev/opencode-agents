@@ -1,0 +1,6 @@
+name: context7
+type: mcp
+description: Version-aligned library/framework docs on demand.
+transport: remote
+url: https://mcp.context7.com/mcp
+source: https://context7.com

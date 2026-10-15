@@ -3,8 +3,9 @@
 DB = registry/{bundles,mcps,plugins}/*.yaml (git-versioned). Bundles union
 on `oa use`. Skills resolved from local search roots, synced into every
 detected agent's skill dir. Project profiles also sync into project-local
-agent dirs so each repo loads only its own bundles. MCPs/plugins with a
-`setup` command delegate agent wiring to their own installer.
+agent dirs and render the mcp block of the repo's opencode.json, so each
+project loads only its own bundles/tools. Plugins and MCPs with a `setup`
+command delegate agent wiring to their own installer.
 """
 
 import json
@@ -23,6 +24,7 @@ TOOL_DIRS = {"mcps": REPO_ROOT / "registry" / "mcps", "plugins": REPO_ROOT / "re
 SEARCH_ROOTS = [REPO_ROOT / "lazy-skills", REPO_ROOT / "skills" / "global", REPO_ROOT / "skills" / "agents"]
 
 PROJECT_PROFILE = Path.cwd() / ".oa.yaml"
+PROJECT_OPENCODE_CONFIG = Path.cwd() / "opencode.json"
 GLOBAL_PROFILE = Path(os.environ.get("OA_HOME", Path.home())) / ".config" / "oa" / "profile.yaml"
 
 # Agent skill dirs, relative to home. Detection = dir exists.
@@ -83,6 +85,34 @@ def active_bundles():
     return [], "none"
 
 
+def opencode_mcp_entry(data):
+    """Manifest -> opencode mcp config entry."""
+    if data.get("transport") == "remote" or data.get("url"):
+        return {"type": "remote", "url": data["url"]}
+    return {"type": "local", "command": list(data.get("command", []))}
+
+
+def render_opencode_mcp(mcp_names):
+    """Merge resolved MCPs into the repo's opencode.json (project profiles only).
+    Only the 'mcp' key is touched; rest of the file is preserved."""
+    block = {}
+    for name in mcp_names:
+        block[name] = opencode_mcp_entry(load_tool("mcps", name))
+    if PROJECT_OPENCODE_CONFIG.exists():
+        try:
+            cfg = json.loads(PROJECT_OPENCODE_CONFIG.read_text())
+        except json.JSONDecodeError:
+            sys.exit(f"error: {PROJECT_OPENCODE_CONFIG} is not valid JSON; not touching it")
+    else:
+        cfg = {}
+    prev = set(cfg.get("mcp", {}))
+    cfg["mcp"] = block
+    PROJECT_OPENCODE_CONFIG.write_text(json.dumps(cfg, indent=2) + "\n")
+    stale = prev - set(block)
+    print(f"opencode.json: wrote mcp block ({len(block)} servers"
+          + (f", removed {len(stale)}: {', '.join(sorted(stale))}" if stale else "") + ")")
+
+
 def cmd_list(args):
     bundles = sorted(p.stem for p in BUNDLES_DIR.glob("*.yaml"))
     if args:
@@ -99,7 +129,7 @@ def cmd_list(args):
         return
     for name in bundles:
         data = bundle_data(name)
-        extras = [f"mcp: {', '.join(data[k])}" for k in ("mcps", "plugins") if data.get(k)]
+        extras = [f"{k}: {', '.join(data[k])}" for k in ("mcps", "plugins") if data.get(k)]
         suffix = f"  [{' | '.join(extras)}]" if extras else ""
         print(f"{name:12} {data.get('description', '')}{suffix}")
 
@@ -183,10 +213,14 @@ def sync_targets(skills, local=False):
 
 
 def handle_tools(kind, names, setup=False):
-    """Check + optionally wire MCP servers / plugins listed by active bundles."""
+    """Check + optionally wire MCP servers / plugins listed by active bundles.
+    MCPs with a transport field are rendered into opencode.json separately."""
     for name in names:
         data = load_tool(kind, name)
+        if kind == "mcps" and data.get("transport"):
+            continue  # rendered by render_opencode_mcp
         command = data.get("command", name)
+        command = command[0] if isinstance(command, list) else command
         if shutil.which(command) is None:
             print(f"{kind}: {name} — CLI not found. Bootstrap with:")
             print(f"        {data.get('bootstrap', '(no bootstrap command in manifest)')}")
@@ -221,6 +255,9 @@ def cmd_use(args):
     sync_targets(skills, local=not global_flag)
     if global_flag:
         sync_targets(skills, local=False)
+    mcp_names = dict(tools)["mcps"]
+    if not global_flag and mcp_names:
+        render_opencode_mcp(mcp_names)
     for kind, names in tools:
         if names:
             handle_tools(kind, names, setup=setup_tools)
@@ -243,7 +280,11 @@ def cmd_status(_args):
             for m in names:
                 data = load_tool(kind, m)
                 command = data.get("command", m)
-                state = "installed" if shutil.which(command) else "NOT INSTALLED"
+                command = command[0] if isinstance(command, list) else command
+                if data.get("transport") and data.get("url"):
+                    state = "remote"
+                else:
+                    state = "installed" if shutil.which(command or m) else "NOT INSTALLED"
                 print(f"  {m} ({state})")
 
 
@@ -261,8 +302,8 @@ def main():
         print("  oa list [bundle]           show bundles or bundle contents")
         print("  oa detect                  suggest bundles from repo signals")
         print("  oa use B... [--global]     activate bundles, sync skills")
-        print("                             project profile -> repo-local sync")
-        print("                             --global        -> global profile + sync")
+        print("                             project profile -> repo-local sync +")
+        print("                             opencode.json mcp block; --global -> global")
         print("                             --setup-tools   run MCP/plugin installers")
         print("  oa status                  active bundles, skills, mcps, plugins")
         sys.exit(1 if len(sys.argv) < 2 else 0)

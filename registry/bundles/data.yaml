@@ -4,3 +4,6 @@ skills:
   - polars
   - matplotlib
   - statistical-analysis
+mcps:
+  - jupyter
+  - sqlite

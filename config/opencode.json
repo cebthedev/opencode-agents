@@ -152,7 +152,7 @@
     "beagle": {
       "description": "Web research and fact-checking agent",
       "mode": "subagent",
-        "model": "opencode/mimo-v2.5-free",
+      "model": "opencode/mimo-v2.5-free",
       "temperature": 0.8,
       "permission": {
         "read": "allow",
@@ -216,7 +216,7 @@
     "architect": {
       "description": "Solution architecture and complexity assessment",
       "mode": "subagent",
-        "model": "deepseek/deepseek-reasoner",
+      "model": "deepseek/deepseek-reasoner",
       "temperature": 0.8,
       "permission": {
         "read": "allow",
@@ -276,6 +276,14 @@
     }
   },
   "mcp": {
+    "agent-browser": {
+      "type": "local",
+      "command": [
+        "agent-browser",
+        "mcp"
+      ],
+      "enabled": true
+    },
     "lsp": {
       "type": "local",
       "command": [

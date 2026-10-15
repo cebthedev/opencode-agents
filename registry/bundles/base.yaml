@@ -10,3 +10,5 @@ skills:
   - refactor
 plugins:
   - opencode-vim
+mcps:
+  - sequential-thinking

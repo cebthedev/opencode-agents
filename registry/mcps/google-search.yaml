@@ -1,0 +1,6 @@
+name: google-search
+type: mcp
+description: Web search via Google. Needs GOOGLE_API_KEY / GOOGLE_SEARCH_ENGINE_ID.
+transport: local
+command: [npx, -y, "@mcp-server/google-search-mcp@latest"]
+source: https://github.com/j4nS1/mcp-server

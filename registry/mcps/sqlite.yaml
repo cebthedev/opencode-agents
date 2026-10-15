@@ -1,0 +1,6 @@
+name: sqlite
+type: mcp
+description: Query and inspect SQLite databases.
+transport: local
+command: [uvx, mcp-server-sqlite]
+source: https://github.com/modelcontextprotocol/servers

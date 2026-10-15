@@ -9,3 +9,9 @@ skills:
   - perplexity-search
   - citation-management
   - markitdown
+mcps:
+  - google-search
+  - fetch
+  - arxiv-mcp-server
+  - jupyter
+  - context7

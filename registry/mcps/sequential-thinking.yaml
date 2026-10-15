@@ -1,0 +1,6 @@
+name: sequential-thinking
+type: mcp
+description: Step-by-step structured reasoning tool. Generic, lightweight.
+transport: local
+command: [npx, -y, "@modelcontextprotocol/server-sequential-thinking"]
+source: https://github.com/modelcontextprotocol/servers
