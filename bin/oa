@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# oa — bundle-based skill loader. Thin wrapper around the Python CLI.
+exec python3 "$(dirname "$0")/../oa/cli.py" "$@"

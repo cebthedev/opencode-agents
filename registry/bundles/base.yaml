@@ -1,0 +1,12 @@
+description: Always-on foundation. Loaded regardless of other bundles.
+skills:
+  - caveman
+  - caveman-commit
+  - caveman-review
+  - caveman-compress
+  - caveman-stats
+  - doc-sync
+  - guidelines
+  - refactor
+plugins:
+  - opencode-vim

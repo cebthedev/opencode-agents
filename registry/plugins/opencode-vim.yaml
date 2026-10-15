@@ -1,0 +1,9 @@
+name: opencode-vim
+type: plugin
+description: Vim editing in the OpenCode prompt — motions, operators, text
+  objects, registers, visual mode, counts, undo/redo, dot repeat. Requires
+  OpenCode 1.17.10+.
+command: opencode
+setup: opencode plugin @leohenon/opencode-vim-plugin --global
+verify: opencode version
+source: https://github.com/leohenon/opencode-vim-plugin

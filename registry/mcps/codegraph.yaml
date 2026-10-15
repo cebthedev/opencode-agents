@@ -1,0 +1,12 @@
+name: codegraph
+type: mcp
+description: Semantic code intelligence. Pre-built graph of symbols/calls/dependencies,
+  served over MCP (single codegraph_explore tool). 100% local, SQLite-backed,
+  auto-syncs on file change. Needs `codegraph init` per project.
+transport: stdio
+command: codegraph
+args: [serve, --mcp]
+bootstrap: npm i -g @colbymchenry/codegraph
+setup: codegraph install --yes
+verify: codegraph version
+source: https://github.com/colbymchenry/codegraph

@@ -1,0 +1,8 @@
+description: Infra, CI/CD, containers, terraform, ops hygiene.
+skills:
+  - codebase-analysis
+  - architecture-decision-records
+  - cc-history
+  - specification
+mcps:
+  - codegraph
