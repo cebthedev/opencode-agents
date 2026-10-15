@@ -4,12 +4,13 @@ A comprehensive agent configuration for [OpenCode](https://opencode.ai) with **c
 
 ## Features
 
-- **Multi-provider resilience** — 4 model providers with automatic fallback
+- **Multi-provider resilience** — 3 model providers with automatic fallback for every agent
+- **oa bundle system** — per-project skills/MCPs/plugins selected by use case (`oa use backend-go research`)
 - **Pantheon Agent Orchestration** — 8 specialized agents via oh-my-opencode-slim (@orchestrator auto-delegates)
 - **Cavecrew Subagents** — 3 compressed-output agents for context-efficient delegation
-- **Lazy-Loaded Skills** — 104 curated skills on-demand via `skill_find` / `skill_use`
-- **OpenSpec Workflow** — Structured planning and implementation workflow
-- **Vim-centric TUI** — Vim muscle memory keybinds for comfortable scrolling
+- **Curated Skills** — 100+ skills, synced per project from use-case bundles
+- **OpenSpec Workflow** — Structured planning and implementation workflow (auto-installed on dev bundles)
+- **Vim-centric TUI** — Vim muscle memory keybinds, plus vim-mode prompt editing
 - **Auto-fallback plugin** — Intelligent retry with provider switching
 - **Caveman Compression** — 65-75% token savings via globally-loaded caveman skills (always-on, all agents)
 - **Large context fallback** — Automatic switch to bigger context models
@@ -17,7 +18,7 @@ A comprehensive agent configuration for [OpenCode](https://opencode.ai) with **c
 
 ## Quick Start — Generate Your `.config/opencode`
 
-This repository is a **complete configuration generator** for OpenCode. Run these commands to set up your entire `~/.config/opencode/` directory:
+This repository is a **complete configuration generator** for OpenCode, managed by `oa` (see [docs/OA_SPEC.md](docs/OA_SPEC.md)):
 
 ```bash
 # 1. Clone and enter the repository
@@ -25,11 +26,12 @@ git clone <repo-url> opencode-agents
 cd opencode-agents
 
 # 2. Set up your environment (edit with your API keys)
+mkdir -p ~/.config/opencode
 cp .env.example ~/.config/opencode/.env
 # Edit ~/.config/opencode/.env and add your keys
 
-# 3. Full deployment (configs, skills, agents)
-make all
+# 3. Deploy global configs + agents (verified)
+bin/oa deploy
 
 # 4. Install Pantheon agents (run once)
 bunx oh-my-opencode-slim@latest install
@@ -44,14 +46,24 @@ bunx oh-my-opencode-slim@latest install
 opencode
 ```
 
-### Step by Step
+### Per-Project Setup
+
+Each project loads only the bundles it needs (skills, MCPs, tools — all project-local):
+
+```bash
+cd your-project
+bin/oa detect                    # suggests bundles from repo signals
+bin/oa use backend-go devops     # writes .oa.yaml, syncs skills, renders opencode.json
+bin/oa doctor                    # verify the profile end-to-end
+```
+
+### Makefile Reference
 
 ```bash
 make setup              # Create directories and copy .env template
-make skills-deploy      # Deploy lazy-loaded (104) and global (13) skills
-make agents             # Deploy agent configurations
-make deploy             # Deploy config files (opencode.json, tui.json, etc.)
-make plugins            # Show plugin installation commands
+make deploy             # Deploy configs + agents (via oa, verified)
+make doctor             # Verify active profile (via oa)
+make test-oa            # Run oa end-to-end tests
 ```
 
 ## Prerequisites
@@ -294,19 +306,24 @@ Vim-centric keybinds optimized for tmux users. Config in `config/tui.json`.
 
 ## MCP Servers
 
-| MCP | Purpose | Status Check |
-|-----|---------|-------------|
-| **lsp** | Language server protocol (Go, TS, Python, Rust, C/C++) | `lsp_get_server_capabilities` |
-| **google-search** | Web search capabilities | Search via agent prompt |
-| **sequential-thinking** | Structured reasoning | Automatic on complex tasks |
-| **fetch** | Web content fetching | `fetch_fetch url="..."` |
-| **aidex** | Code indexing and search | `aidex_aidex_query term="..."` |
-| **context7** | Documentation search | `context7_query_docs libraryId="..."` |
-| **jupyter** | Jupyter notebook integration | `jupyter_execute_code code="..."` |
-| **arxiv-mcp-server** | Academic paper search, download, analysis | `search_papers`, `download_paper`, `read_paper` |
-| **github** | Repository management | `github_search_repositories query="..."` |
-| **filesystem** | Enhanced file operations | `filesystem_read_text_file path="..."` |
-| **sqlite** | Database queries | `sqlite_read_query query="..."` |
+MCP servers are **assigned per bundle** (manifests in `registry/mcps/`) and rendered into each project's `opencode.json` by `oa use`. The table below shows the full registry:
+
+| MCP | Purpose | Bundle(s) | Status Check |
+|-----|---------|-----------|-------------|
+| **lsp** | Language server protocol (Go, TS, Python, Rust, C/C++) | backend-go, fullstack | `lsp_get_server_capabilities` |
+| **google-search** | Web search capabilities | research | Search via agent prompt |
+| **sequential-thinking** | Structured reasoning | base | Automatic on complex tasks |
+| **fetch** | Web content fetching | research | `fetch_fetch url="..."` |
+| **aidex** | Code indexing and search | backend-go, fullstack, devops | `aidex_aidex_query term="..."` |
+| **context7** | Documentation search | all dev + research | `context7_query_docs libraryId="..."` |
+| **jupyter** | Jupyter notebook integration | research, data | `jupyter_execute_code code="..."` |
+| **arxiv-mcp-server** | Academic paper search, download, analysis | research | `search_papers`, `download_paper`, `read_paper` |
+| **github** | Repository management | backend-go, fullstack, devops | `github_search_repositories query="..."` |
+| **filesystem** | Enhanced file operations | unassigned (enable per project) | `filesystem_read_text_file path="..."` |
+| **sqlite** | Database queries | data | `sqlite_read_query query="..."` |
+| **codegraph** | Semantic code graph, surgical context | backend-go, fullstack, devops | `codegraph_explore` |
+
+> A project only loads the MCPs of its active bundles — keeping tool schemas small per session.
 
 ### MCP Usage Examples
 
@@ -381,55 +398,38 @@ fetch_fetch url="https://example.com" max_length=5000
 
 ## Skills
 
-### Lazy-Loaded Skills (104 curated skills)
+Skills are grouped into **bundles** (`registry/bundles/`) and synced per project by `oa use` into `.claude/skills` and `.cursor/skills`. Source trees:
 
-Skills are organized into **lazy-loaded** (on-demand) and **globally loaded** (always available):
-
- **`lazy-skills/`** (104 curated skills) — Loaded on-demand via `skill_find` and `skill_use`:
-- Research & papers (arxiv, arxiv-to-md, perplexity, openalex, literature-review)
+**`lazy-skills/`** (100+ curated skills) — the skill pool bundles draw from:
+- Research & papers (arxiv-to-md, perplexity-search, literature-review, peer-review)
 - Machine learning (scikit-learn, pytorch, transformers, stable-baselines3)
 - Data engineering (polars, dask, vaex, zarr-python)
 - Visualization (matplotlib, seaborn, plotly, infographics)
 - OpenSpec workflow skills (openspec-explore, openspec-new-change, etc.)
 - And many more...
 
-**`skills/global/`** (13 skills) — Always loaded:
+**`skills/global/`** (13 skills) — always included via the `base` bundle:
 - caveman — Token compression (always-on, all agents)
-- caveman-commit — Conventional commit messages
-- caveman-review — Compressed PR reviews
-- caveman-compress — Memory file compression
-- caveman-stats — Token usage statistics
-- caveman-help — Caveman command reference
+- caveman-commit / caveman-review / caveman-compress / caveman-stats / caveman-help
 - cavecrew — Subagent delegation guide
 - deepthink — Structured reasoning
-- python-design-patterns — Architecture patterns
-- python-qa — Code quality
-- software-architecture — Design decisions
-- decision-critic — Validation
-- content-humanizer — Writing style
+- python-design-patterns, python-qa, software-architecture
+- decision-critic, content-humanizer
 
-**`skills/agents/`** (20 skills) — Agent-specific lazy-loaded skills:
-- OpenSpec workflow skills (explore, new-change, apply-change, verify-change, etc.)
-- Architecture decision records
-- PDF-to-markdown, drawio diagrams, infographics
-- And more...
+**`skills/agents/`** (16 skills) — additional agent-specific skills, available to bundles
 
 ### Using Skills
 
-Agents discover and load skills automatically. Each skill has `tags` in its frontmatter for better discoverability:
+Agents read skills from the project's `.claude/skills` / `.cursor/skills` (synced by `oa use`). To give a project a skill, add it to the relevant bundle and re-run `oa use`:
 
-```bash
-# Find skills by keyword (searches name, description, and tags)
-skill_find('data visualization')
-skill_find('foundation models')
-skill_find('arxiv papers')
-
-# Load specific skills
-skill_use(['seaborn', 'matplotlib'])
-
-# Read files from a skill
-skill_resource('python-design-patterns', 'SKILL.md')
+```yaml
+# registry/bundles/research.yaml
+skills:
+  - literature-review
+  - your-new-skill   # <- add here
 ```
+
+`make validate` fails if a bundle references a skill that doesn't exist.
 
 ### Skill Bundles (oa)
 
@@ -536,23 +536,36 @@ Agent instructions here...
 ## Commands
 
 ```bash
+# oa (per-project + deploy)
+bin/oa list [bundle]     # show bundles or bundle contents
+bin/oa detect            # suggest bundles from repo signals
+bin/oa use B... [--global] [--setup-tools]  # activate bundles, sync skills, render opencode.json
+bin/oa status            # active bundles, skills, agents, mcps, plugins
+bin/oa deploy            # deploy configs + agents to ~/.config/opencode (verified)
+bin/oa doctor            # verify active profile end-to-end
+
+# make
 make all                # Full setup and deployment
 make setup              # Create directories
-make skills-deploy      # Deploy all skills (lazy + global)
-make lazy-skills-deploy # Deploy lazy-loaded skills only
-make global-skills-deploy # Deploy globally loaded skills only
-make caveman-deploy     # Deploy caveman skills only
+make deploy             # Deploy configuration files (via oa)
+make doctor             # Verify active profile (via oa)
 make agents             # Deploy agent configurations
-make deploy             # Deploy configuration files
 make plugins            # Show plugin installation commands
 make install            # Full installation with next steps
-make validate           # Validate all JSON configs
-make validate-yaml      # Validate YAML frontmatter in SKILL.md files
-make test               # Run validation tests
+make validate           # Lint registry + fallback coverage + validate configs
+make test-oa            # Run oa end-to-end tests (tests/test_oa.py)
 make test-skills        # Validate all skill YAML frontmatter and structure
 make test-skill NAME=... # Test a specific skill
 make clean              # Remove deployed configs
 make help               # Show all targets
+```
+
+Global skill deployment (alternative to per-project `oa use`):
+```bash
+make skills-deploy      # Deploy all skills (lazy-skills + global)
+make lazy-skills-deploy # Deploy lazy-loaded skills only
+make global-skills-deploy # Deploy globally loaded skills only
+make caveman-deploy     # Deploy caveman skills only
 ```
 
 ## Project Structure
@@ -663,10 +676,10 @@ Implement a caching layer for the API
 
 ## Updating
 
-Update submodules:
 ```bash
-make submodules
-make skills
+git pull                # Update this repository
+make deploy             # Re-deploy configs (verified by oa)
+bin/oa use <bundles>    # Re-sync any project whose bundles changed
 ```
 
 ## Troubleshooting
