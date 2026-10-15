@@ -25,7 +25,10 @@ class Oa < Formula
     system "python3.12", "-m", "venv", venv
     system venv/"bin/pip", "install", "--quiet", "pyyaml"
 
-    (bin/"oa").write_env_script venv/"bin/python", prefix/"oa/cli.py"
+    (bin/"oa").write <<~EOS
+      #!/bin/bash
+      exec "#{venv}/bin/python" "#{prefix}/oa/cli.py" "$@"
+    EOS
   end
 
   test do
