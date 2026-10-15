@@ -57,8 +57,10 @@ make install-cli
 # Option B — PATH entry in ~/.zshrc instead
 export PATH="$HOME/Projects/opencode-agents/bin:$PATH"
 
-# Option C — Homebrew (also works on a fresh laptop, see below)
-brew install --HEAD ./packaging/homebrew/oa.rb
+# Option C — Homebrew (fresh laptop; needs a local tap, see below)
+brew tap-new cebthedev/oa --no-git
+ln -sf "$PWD/packaging/homebrew/oa.rb" "$(brew --repo cebthedev/oa)/Formula/oa.rb"
+brew install cebthedev/oa/oa
 ```
 
 ### New Laptop Bootstrap
@@ -67,7 +69,7 @@ brew install --HEAD ./packaging/homebrew/oa.rb
 # 1. Get the repo
 git clone git@github.com:cebthedev/opencode-agents.git ~/Projects/opencode-agents
 cd ~/Projects/opencode-agents
-# (or: brew install --HEAD ./packaging/homebrew/oa.rb inside the clone)
+# (or skip the clone: run the Option C tap commands anywhere)
 
 # 2. oa on PATH
 make install-cli
@@ -80,11 +82,13 @@ bunx oh-my-opencode-slim@latest install
 npm install -g opencode-auto-fallback
 ```
 
-Brew notes: the formula installs the whole repo as a keg (registry, skills,
-configs included) and wraps `oa` with the correct PyYAML path. Update it with
-`brew reinstall --fetch-HEAD oa`. For a private repo, git must be able to
-fetch the URL. Option A is better while you're iterating on bundles — a brew
-keg freezes until you reinstall.
+Brew notes: modern Homebrew rejects `brew install ./formula.rb` — the formula
+must live in a tap, hence the `tap-new` + symlink dance above. The formula
+installs the whole repo as a keg (registry, skills, configs included) and
+vendors PyYAML in a private venv (there is no Homebrew `pyyaml` formula).
+Update it with `brew reinstall cebthedev/oa/oa`. For a private repo, git must
+be able to fetch the URL. Option A is better while you're iterating on
+bundles — a brew keg freezes until you reinstall.
 
 ### Per-Project Setup
 
@@ -458,8 +462,6 @@ Skills are grouped into **bundles** (`registry/bundles/`) and synced per project
 - python-design-patterns, python-qa, software-architecture
 - decision-critic, content-humanizer
 
-**`skills/agents/`** (16 skills) — additional agent-specific skills, available to bundles
-
 ### Using Skills
 
 Agents read skills from the project's `.claude/skills` / `.cursor/skills` (synced by `oa use`). To give a project a skill, add it to the relevant bundle and re-run `oa use`:
@@ -479,8 +481,8 @@ Skills, MCPs, plugins, and subagents are grouped into use-case bundles:
 ```
 registry/
 ├── bundles/    # base, backend-go, fullstack, devops, research, data
-├── mcps/       # MCP server manifests (12)
-└── plugins/    # CLI tools/plugins (opencode-vim, openspec, codegraph)
+├── mcps/       # MCP server manifests (13, incl. opt-in filesystem)
+└── plugins/    # CLI tools/plugins (opencode-vim, openspec)
 ```
 Activate per project with `bin/oa use <bundle...>` — it writes `.oa.yaml`,
 syncs skills into project-local agent dirs, and renders the repo's
@@ -629,9 +631,7 @@ opencode-agents/
 │   └── plugins/                      # opencode-vim, openspec, codegraph
 ├── lazy-skills/                      # 100+ curated on-demand skills
 ├── skills/
-│   ├── global/                       # Always-loaded skills (caveman family)
-│   ├── agents/                       # Agent-specific skills
-│   └── awesome/                      # Skill collection
+│   └── global/                       # Always-loaded skills (caveman family)
 ├── agents/                           # 15 agent definitions
 │   ├── build.md                      # Primary: Development
 │   ├── research.md                   # Primary: Research
@@ -658,7 +658,6 @@ opencode-agents/
 │   └── PLUGIN_GUIDE.md               # Detailed plugin setup guide
 └── scripts/
     ├── deploy.sh                     # Deploy configs to ~/.config/opencode/
-    ├── sync-agents-to-project.sh     # Sync agent configs to project
     ├── test-skill.sh                 # Test a specific skill
     ├── test-skills.sh                # Test all skills
     ├── substitute_env_in_json.py     # JSON env substitution

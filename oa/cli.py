@@ -24,7 +24,7 @@ BUNDLES_DIR = REPO_ROOT / "registry" / "bundles"
 TOOL_DIRS = {"mcps": REPO_ROOT / "registry" / "mcps", "plugins": REPO_ROOT / "registry" / "plugins"}
 AGENTS_DIR = REPO_ROOT / "agents"
 # Search order matters: later roots override earlier on name conflict.
-SEARCH_ROOTS = [REPO_ROOT / "lazy-skills", REPO_ROOT / "skills" / "global", REPO_ROOT / "skills" / "agents"]
+SEARCH_ROOTS = [REPO_ROOT / "lazy-skills", REPO_ROOT / "skills" / "global"]
 
 PROJECT_PROFILE = Path.cwd() / ".oa.yaml"
 PROJECT_OPENCODE_CONFIG = Path.cwd() / "opencode.json"

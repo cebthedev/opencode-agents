@@ -1,0 +1,2 @@
+# oa CLI runtime dependency (oa/cli.py)
+pyyaml>=6.0
