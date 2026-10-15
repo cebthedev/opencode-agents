@@ -57,3 +57,5 @@ papers/
 # oa generated artifacts (when oa is run inside this repo)
 /.oa.yaml
 /opencode.json
+/.claude/
+/.cursor/
