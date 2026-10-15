@@ -4,8 +4,9 @@ DB = registry/{bundles,mcps,plugins}/*.yaml (git-versioned). Bundles union
 on `oa use`. Skills resolved from local search roots, synced into every
 detected agent's skill dir. Project profiles also sync into project-local
 agent dirs and render the mcp block of the repo's opencode.json, so each
-project loads only its own bundles/tools. Plugins and MCPs with a `setup`
-command delegate agent wiring to their own installer.
+project loads only its own bundles/tools. Agents listed in bundles are
+informational: subagent model/permission defs stay in opencode config;
+bundles record which ones a use case implies.
 """
 
 import json
@@ -20,6 +21,7 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BUNDLES_DIR = REPO_ROOT / "registry" / "bundles"
 TOOL_DIRS = {"mcps": REPO_ROOT / "registry" / "mcps", "plugins": REPO_ROOT / "registry" / "plugins"}
+AGENTS_DIR = REPO_ROOT / "agents"
 # Search order matters: later roots override earlier on name conflict.
 SEARCH_ROOTS = [REPO_ROOT / "lazy-skills", REPO_ROOT / "skills" / "global", REPO_ROOT / "skills" / "agents"]
 
@@ -49,7 +51,7 @@ def bundle_data(name):
 
 
 def resolve_items(bundle_names, key):
-    """Union of base + bundles for a list field ('skills'|'mcps'|'plugins')."""
+    """Union of base + bundles for a list field ('skills'|'mcps'|'plugins'|'agents')."""
     seen, ordered = set(), []
     for name in ["base"] + list(bundle_names):
         for item in bundle_data(name).get(key, []):
@@ -119,17 +121,20 @@ def cmd_list(args):
         for name in args:
             data = bundle_data(name)
             print(f"{name} ({len(data.get('skills', []))} skills, "
-                  f"{len(data.get('mcps', []))} mcps, {len(data.get('plugins', []))} plugins)")
+                  f"{len(data.get('mcps', []))} mcps, {len(data.get('plugins', []))} plugins, "
+                  f"{len(data.get('agents', []))} agents)")
             for s in data.get("skills", []):
                 print(f"  skill:  {s}")
             for m in data.get("mcps", []):
                 print(f"  mcp:    {m}")
             for p in data.get("plugins", []):
                 print(f"  plugin: {p}")
+            for a in data.get("agents", []):
+                print(f"  agent:  {a}")
         return
     for name in bundles:
         data = bundle_data(name)
-        extras = [f"{k}: {', '.join(data[k])}" for k in ("mcps", "plugins") if data.get(k)]
+        extras = [f"{k}: {', '.join(data[k])}" for k in ("mcps", "plugins", "agents") if data.get(k)]
         suffix = f"  [{' | '.join(extras)}]" if extras else ""
         print(f"{name:12} {data.get('description', '')}{suffix}")
 
@@ -248,9 +253,13 @@ def cmd_use(args):
     profile.write_text(yaml.safe_dump({"bundles": bundles}, default_flow_style=False))
 
     skills = resolve_items(bundles, "skills")
+    agents = resolve_items(bundles, "agents")
     tools = [(k, resolve_items(bundles, k)) for k in ("mcps", "plugins")]
     n_tools = sum(len(t) for _, t in tools)
-    print(f"active: base + {' + '.join(bundles)} -> {len(skills)} skills, {n_tools} tools")
+    print(f"active: base + {' + '.join(bundles)} -> {len(skills)} skills, "
+          f"{n_tools} tools, {len(agents)} agents")
+    if agents:
+        print(f"agents: {', '.join(agents)} (subagent defs stay in opencode config)")
     print(f"profile: {profile}")
     sync_targets(skills, local=not global_flag)
     if global_flag:
@@ -266,6 +275,7 @@ def cmd_use(args):
 def cmd_status(_args):
     bundles, source = active_bundles()
     skills = resolve_items(bundles, "skills")
+    agents = resolve_items(bundles, "agents")
     print(f"bundles: {'base' if not bundles else 'base + ' + ' + '.join(bundles)}")
     print(f"profile: {source}")
     print(f"skills ({len(skills)}):")
@@ -273,6 +283,11 @@ def cmd_status(_args):
         loc = find_skill_dir(s)
         mark = "" if loc else "  [MISSING]"
         print(f"  {s}{mark}")
+    if agents:
+        print(f"agents ({len(agents)}):")
+        for a in agents:
+            mark = "" if (AGENTS_DIR / f"{a}.md").exists() else "  [NO DEF in agents/]"
+            print(f"  {a}{mark}")
     for kind in ("mcps", "plugins"):
         names = resolve_items(bundles, kind)
         if names:
@@ -305,7 +320,7 @@ def main():
         print("                             project profile -> repo-local sync +")
         print("                             opencode.json mcp block; --global -> global")
         print("                             --setup-tools   run MCP/plugin installers")
-        print("  oa status                  active bundles, skills, mcps, plugins")
+        print("  oa status                  active bundles, skills, agents, mcps, plugins")
         sys.exit(1 if len(sys.argv) < 2 else 0)
     COMMANDS[sys.argv[1]](sys.argv[2:])
 

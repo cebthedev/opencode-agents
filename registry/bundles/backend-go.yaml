@@ -11,3 +11,9 @@ mcps:
   - github
   - context7
   - aidex
+agents:
+  - build
+  - coder
+  - clean-coder
+  - code-reviewer
+  - architect

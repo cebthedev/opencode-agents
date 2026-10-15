@@ -7,3 +7,7 @@ skills:
 mcps:
   - jupyter
   - sqlite
+agents:
+  - data-scientist
+  - build
+  - research

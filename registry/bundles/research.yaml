@@ -15,3 +15,8 @@ mcps:
   - arxiv-mcp-server
   - jupyter
   - context7
+agents:
+  - research
+  - beagle
+  - paper-analyst
+  - researcher

@@ -9,3 +9,6 @@ mcps:
   - github
   - context7
   - aidex
+agents:
+  - build
+  - architect

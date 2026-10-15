@@ -12,3 +12,8 @@ mcps:
   - context7
   - agent-browser
   - aidex
+agents:
+  - build
+  - coder
+  - clean-coder
+  - code-reviewer
