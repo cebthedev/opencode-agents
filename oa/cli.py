@@ -276,6 +276,46 @@ def cmd_use(args):
             handle_tools(kind, names, setup=setup_tools)
 
 
+CONFIG_FILES = ["opencode.json", "tui.json", "fallback.json", "oh-my-opencode-slim.json"]
+
+
+def cmd_deploy(_args):
+    """R1: deploy configs + agents to the opencode dir, with verification."""
+    home = Path(os.environ.get("OA_HOME", Path.home()))
+    target = home / ".config" / "opencode"
+    target.mkdir(parents=True, exist_ok=True)
+    substitute = REPO_ROOT / "scripts" / "substitute_env_in_json.py"
+
+    ok = True
+    for name in CONFIG_FILES:
+        src, dst = REPO_ROOT / "config" / name, target / name
+        try:
+            subprocess.run(
+                [sys.executable, str(substitute), "--input", str(src),
+                 "--output", str(dst), "--env", str(target / ".env")],
+                check=True, capture_output=True, text=True,
+            )
+            json.loads(dst.read_text())
+            print(f"deployed: {name}")
+        except (subprocess.CalledProcessError, json.JSONDecodeError) as err:
+            ok = False
+            detail = e.stderr.strip() if isinstance(err, subprocess.CalledProcessError) else err
+            print(f"FAILED: {name}: {detail}")
+
+    agents_target = target / "agents"
+    agent_files = sorted((REPO_ROOT / "agents").rglob("*.md"))
+    for md in agent_files:
+        rel = md.relative_to(REPO_ROOT / "agents")
+        dest = agents_target / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(md, dest)
+    print(f"deployed: agents/ ({len(agent_files)} files)")
+
+    if not ok:
+        sys.exit(1)
+    print(f"deploy OK -> {target}")
+
+
 def cmd_status(_args):
     bundles, source = active_bundles()
     skills = resolve_items(bundles, "skills")
@@ -307,11 +347,60 @@ def cmd_status(_args):
                 print(f"  {m} ({state})")
 
 
+def cmd_doctor(_args):
+    """R2: verify the active profile end-to-end. Exit 1 on any FAIL."""
+    failures = []
+
+    def check(label, ok=True, detail=""):
+        mark = "ok" if ok else "FAIL"
+        print(f"{mark:4} {label}" + (f" — {detail}" if detail else ""))
+        if not ok:
+            failures.append(label)
+
+    bundles, source = active_bundles()
+    if source == "none":
+        print("warn no profile — base bundle only (run: oa use <bundle>)")
+
+    if PROJECT_OPENCODE_CONFIG.exists():
+        try:
+            cfg = json.loads(PROJECT_OPENCODE_CONFIG.read_text())
+            check("opencode.json parses")
+        except json.JSONDecodeError as e:
+            check("opencode.json parses", False, str(e))
+        else:
+            for name, entry in cfg.get("mcp", {}).items():
+                if entry.get("type") == "remote" or entry.get("url"):
+                    check(f"mcp {name}", True, "remote")
+                    continue
+                cmd = (entry.get("command") or [None])[0]
+                check(f"mcp {name}", bool(cmd) and shutil.which(cmd) is not None,
+                      cmd or "no command")
+    else:
+        print("warn no project opencode.json (run: oa use <bundle>)")
+
+    expected = {s for s in resolve_items(bundles, "skills") if find_skill_dir(s)}
+    for agent, rel in LOCAL_TARGETS.items():
+        manifest = Path.cwd() / rel / MANIFEST_NAME
+        if not manifest.exists():
+            print(f"warn {agent}: not synced (run: oa use <bundle>)")
+            continue
+        synced = set(json.loads(manifest.read_text()))
+        missing, extra = expected - synced, synced - expected
+        check(f"{agent} skills in sync", not missing and not extra,
+              f"missing={sorted(missing)} extra={sorted(extra)}" if missing or extra else "")
+
+    if failures:
+        sys.exit(1)
+    print("doctor OK")
+
+
 COMMANDS = {
     "list": cmd_list,
     "detect": cmd_detect,
     "use": cmd_use,
     "status": cmd_status,
+    "deploy": cmd_deploy,
+    "doctor": cmd_doctor,
 }
 
 
@@ -325,7 +414,9 @@ def main():
         print("                             opencode.json mcp block; --global -> global")
         print("                             --setup-tools   run MCP/plugin installers")
         print("  oa status                  active bundles, skills, agents, mcps, plugins")
-        sys.exit(1 if len(sys.argv) < 2 else 0)
+        print("  oa deploy                  deploy configs+agents to ~/.config/opencode, verified")
+        print("  oa doctor                  verify active profile: opencode.json, mcp commands, sync")
+        sys.exit(1)
     COMMANDS[sys.argv[1]](sys.argv[2:])
 
 

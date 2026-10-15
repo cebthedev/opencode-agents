@@ -1,4 +1,4 @@
-.PHONY: all setup skills-deploy lazy-skills-deploy global-skills-deploy agents deploy clean test help plugins validate validate-yaml
+.PHONY: all setup skills-deploy lazy-skills-deploy global-skills-deploy agents deploy doctor clean test test-oa test-skills help plugins validate validate-yaml validate-registry
 
 # Default target - full build and deploy
 all: setup skills-deploy lazy-skills-deploy global-skills-deploy agents deploy plugins
@@ -97,11 +97,13 @@ agents: ## Deploy agent configurations to ~/.config/opencode/agents/
 	@./scripts/deploy.sh --agents
 	@echo "$(GREEN)✓ Agents deployed!$(RESET)"
 
-deploy: ## Deploy main configuration files
+deploy: ## Deploy main configuration files (via oa, verified)
 	@echo "$(BLUE)Deploying configuration...$(RESET)"
-	@chmod +x scripts/deploy.sh
-	@./scripts/deploy.sh --config
+	@./bin/oa deploy
 	@echo "$(GREEN)✓ Configuration deployed!$(RESET)"
+
+doctor: ## Verify active profile end-to-end (via oa)
+	@./bin/oa doctor
 
 install: all ## Full installation (setup + skills + agents + config + plugins)
 	@echo "$(GREEN)Installation complete!$(RESET)"
@@ -147,11 +149,14 @@ clean: ## Remove deployed configurations
 	@rm -f ~/.config/opencode/.mcp.json
 	@echo "$(GREEN)Clean complete!$(RESET)"
 
-test: validate ## Run validation tests
+test: validate test-oa ## Run validation tests
 	@echo "$(BLUE)Running tests...$(RESET)"
 	@chmod +x scripts/deploy.sh
 	@./scripts/deploy.sh --validate
 	@echo "$(GREEN)Tests complete!$(RESET)"
+
+test-oa: ## Run oa end-to-end tests (docs/OA_SPEC.md)
+	@python3 -m unittest discover -s tests -v
 
 test-skills: ## Validate all skill YAML frontmatter and structure
 	@echo "$(BLUE)Testing all skills...$(RESET)"
