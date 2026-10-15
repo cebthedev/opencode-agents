@@ -227,10 +227,14 @@ def handle_tools(kind, names, setup=False):
         command = data.get("command", name)
         command = command[0] if isinstance(command, list) else command
         if shutil.which(command) is None:
-            print(f"{kind}: {name} — CLI not found. Bootstrap with:")
-            print(f"        {data.get('bootstrap', '(no bootstrap command in manifest)')}")
-            print(f"        then: {data.get('setup', '(no setup command)')}")
-            continue
+            if data.get("auto_install") and data.get("bootstrap"):
+                print(f"{kind}: {name} — not found, auto-installing: {data['bootstrap']}")
+                subprocess.run(data["bootstrap"], shell=True, check=False)
+            if shutil.which(command) is None:
+                print(f"{kind}: {name} — CLI not found. Bootstrap with:")
+                print(f"        {data.get('bootstrap', '(no bootstrap command in manifest)')}")
+                print(f"        then: {data.get('setup', '(no setup command)')}")
+                continue
         if setup and data.get("setup"):
             print(f"{kind}: {name} — running: {data['setup']}")
             subprocess.run(data["setup"], shell=True, check=False)

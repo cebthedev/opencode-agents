@@ -11,6 +11,8 @@ mcps:
   - github
   - context7
   - aidex
+plugins:
+  - openspec
 agents:
   - build
   - coder

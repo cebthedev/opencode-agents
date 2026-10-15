@@ -1,0 +1,11 @@
+name: openspec
+type: tool
+description: Spec-driven development workflow. /opsx:explore, propose, apply,
+  archive — specs before code. Dev bundles pull this in automatically.
+command: openspec
+bootstrap: brew install openspec
+bootstrap_alt: npm i -g @fission-ai/openspec@latest
+setup: openspec init
+auto_install: true
+verify: openspec --version
+source: https://github.com/Fission-AI/OpenSpec
