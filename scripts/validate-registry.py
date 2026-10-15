@@ -90,6 +90,9 @@ def check_fallback():
             check_model(entry, f"agents.{agent}.fallback")
         if conf.get("largeContextModel"):
             check_model(conf["largeContextModel"], f"agents.{agent}.largeContextModel")
+    # Coverage: every defined agent must have a fallback chain, regardless of bundle.
+    for agent in sorted(agents - set(fb.get("agents", {}))):
+        errors.append(f"fallback.json: agent '{agent}' has no fallback chain")
 
 
 check_bundles()

@@ -143,17 +143,13 @@ echo -e "${BLUE}------------------------------------${RESET}"
 head -30 "$SKILL_DIR/SKILL.md"
 echo -e "${BLUE}------------------------------------${RESET}"
 
-# 8. Check if skill is in registry
+# 8. Check if skill is referenced by any oa bundle
 echo ""
-echo -n "7. In skill registry: "
-if [ -f "$REPO_DIR/skills/registry.json" ]; then
-    if grep -q "\"$SKILL_NAME\"" "$REPO_DIR/skills/registry.json" 2>/dev/null; then
-        echo -e "${GREEN}✓ Yes${RESET}"
-    else
-        echo -e "${YELLOW}⚠ Not found in registry${RESET}"
-    fi
+echo -n "7. In an oa bundle: "
+if grep -rq "\b$SKILL_NAME\b" "$REPO_DIR/registry/bundles/" 2>/dev/null; then
+    echo -e "${GREEN}✓ Yes${RESET}"
 else
-    echo -e "${YELLOW}⚠ Registry not found${RESET}"
+    echo -e "${YELLOW}⚠ Not in any bundle (add it to registry/bundles/<bundle>.yaml to deploy it)${RESET}"
 fi
 
 echo ""

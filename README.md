@@ -431,12 +431,18 @@ skill_use(['seaborn', 'matplotlib'])
 skill_resource('python-design-patterns', 'SKILL.md')
 ```
 
-### Skill Registry
+### Skill Bundles (oa)
 
-The registry maps skills to agents by category:
+Skills, MCPs, plugins, and subagents are grouped into use-case bundles:
 ```
-skills/registry.json
+registry/
+├── bundles/    # base, backend-go, fullstack, devops, research, data
+├── mcps/       # MCP server manifests (12)
+└── plugins/    # CLI tools/plugins (opencode-vim, openspec, codegraph)
 ```
+Activate per project with `bin/oa use <bundle...>` — it writes `.oa.yaml`,
+syncs skills into project-local agent dirs, and renders the repo's
+`opencode.json` mcp block. See `oa list` / `oa detect` / `oa status`.
 
 ## Caveman Compression (Always-On)
 
@@ -558,12 +564,19 @@ opencode-agents/
 ├── VERSION                           # Version tag (1.0.0)
 ├── .env.example                      # API key template
 ├── logo.svg                          # Project logo
-├── lazy-skills/                      # 104 curated lazy-loaded skills
+├── bin/
+│   └── oa                            # Bundle-based skill/MCP loader (CLI)
+├── oa/
+│   └── cli.py                        # oa implementation
+├── registry/                         # oa DB: bundles, MCP + plugin manifests
+│   ├── bundles/                      # base, backend-go, fullstack, devops, research, data
+│   ├── mcps/                         # 13 MCP server manifests
+│   └── plugins/                      # opencode-vim, openspec, codegraph
+├── lazy-skills/                      # 100+ curated on-demand skills
 ├── skills/
-│   ├── global/                       # 13 always-loaded skills
-│   ├── agents/                       # 20 agent-specific skills
-│   ├── awesome/                      # Skill collection
-│   └── registry.json                 # Skill-to-agent mappings
+│   ├── global/                       # Always-loaded skills (caveman family)
+│   ├── agents/                       # Agent-specific skills
+│   └── awesome/                      # Skill collection
 ├── agents/                           # 15 agent definitions
 │   ├── build.md                      # Primary: Development
 │   ├── research.md                   # Primary: Research
@@ -584,19 +597,18 @@ opencode-agents/
 ├── config/
 │   ├── opencode.json                 # Main configuration
 │   ├── tui.json                      # TUI keybinds
-│   ├── fallback.json                 # Auto-fallback plugin config
+│   ├── fallback.json                 # Auto-fallback plugin config (all agents)
 │   └── oh-my-opencode-slim.json      # Pantheon agent presets
 ├── docs/
 │   └── PLUGIN_GUIDE.md               # Detailed plugin setup guide
-├── scripts/
-│   ├── deploy.sh                     # Deploy configs to ~/.config/opencode/
-│   ├── setup-skills.sh              # Skill setup helper
-│   ├── sync-agents-to-project.sh    # Sync agent configs to project
-│   ├── test-skill.sh                # Test a specific skill
-│   ├── test-skills.sh               # Test all skills
-│   ├── substitute_env_in_json.py     # JSON env substitution
-│   └── validate-skills-yaml.py      # YAML validation
-└── lazy.config.json                  # Lazy-loading configuration
+└── scripts/
+    ├── deploy.sh                     # Deploy configs to ~/.config/opencode/
+    ├── sync-agents-to-project.sh     # Sync agent configs to project
+    ├── test-skill.sh                 # Test a specific skill
+    ├── test-skills.sh                # Test all skills
+    ├── substitute_env_in_json.py     # JSON env substitution
+    ├── validate-registry.py          # Lint registry + fallback coverage
+    └── validate-skills-yaml.py       # YAML validation
 ```
 
 ## Usage Examples
@@ -675,9 +687,9 @@ make skills
 3. Check if a provider is in cooldown (30s default)
 
 ### Skills not found
-1. Run `make skills-deploy` to deploy skills
-2. Check `~/.config/opencode/lazy-skills/` exists
-3. Verify `lazy.config.json` is deployed to `~/.config/opencode/lazy.config.json`
+1. Run `bin/oa status` in your project to see the active bundles
+2. Check the project has `.oa.yaml` (run `bin/oa detect` then `bin/oa use <bundles>`)
+3. Verify skills synced into the project's `.claude/skills` / `.cursor/skills`
 
 ### Can't scroll in message buffer
 1. Use `ctrl+d` / `ctrl+u` for half-page scrolling (Vim-style)

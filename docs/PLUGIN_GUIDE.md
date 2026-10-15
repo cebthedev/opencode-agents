@@ -152,7 +152,10 @@ make deploy  # Copies config/*.json to ~/.config/opencode/
 | `config/fallback.json` | `~/.config/opencode/fallback.json` | opencode-auto-fallback |
 | `config/oh-my-opencode-slim.json` | `~/.config/opencode/oh-my-opencode-slim.json` | oh-my-opencode-slim |
 | `config/tui.json` | `~/.config/opencode/tui.json` | TUI keybinds |
-| `lazy.config.json` | `~/.config/opencode/lazy.config.json` | Skill loader |
+
+Per-project skills/MCPs are managed by `oa` (see README): bundles live in
+`registry/`, profiles in `.oa.yaml`, and `oa use` syncs skills + renders
+the repo's `opencode.json` mcp block.
 
 ## Update Tracking
 

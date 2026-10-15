@@ -99,11 +99,6 @@ deploy_config() {
         deploy_json_config "$CONFIG_SOURCE/oh-my-opencode-slim.json" "$TARGET_DIR/oh-my-opencode-slim.json" "oh-my-opencode-slim.json"
     fi
 
-    # Deploy lazy.config.json
-    if [ -f "$REPO_DIR/lazy.config.json" ]; then
-        deploy_json_config "$REPO_DIR/lazy.config.json" "$TARGET_DIR/lazy.config.json" "lazy.config.json"
-    fi
-
     echo -e "${GREEN}Configuration deployed successfully!${RESET}"
 }
 
@@ -159,13 +154,7 @@ deploy_skills() {
         lazy_count=$(ls "$REPO_DIR/lazy-skills/" 2>/dev/null | wc -l | tr -d ' ')
         echo -e "  ${GREEN}Deployed $lazy_count lazy-loaded skills${RESET}"
     fi
-    
-    # Copy skill registry
-    if [ -f "$REPO_DIR/skills/registry.json" ]; then
-        cp "$REPO_DIR/skills/registry.json" "$TARGET_DIR/skills/registry.json"
-        echo -e "  ${GREEN}Deployed: registry.json${RESET}"
-    fi
-    
+
     echo -e "${GREEN}Skills deployed successfully!${RESET}"
 }
 
