@@ -105,6 +105,12 @@ deploy: ## Deploy main configuration files (via oa, verified)
 doctor: ## Verify active profile end-to-end (via oa)
 	@./bin/oa doctor
 
+install-cli: ## Symlink oa into ~/.local/bin (put it on PATH)
+	@mkdir -p ~/.local/bin
+	@ln -sf "$(CURDIR)/bin/oa" ~/.local/bin/oa
+	@echo "$(GREEN)✓ oa -> ~/.local/bin/oa$(RESET)"
+	@echo "$(YELLOW)Ensure ~/.local/bin is on your PATH$(RESET)"
+
 install: all ## Full installation (setup + skills + agents + config + plugins)
 	@echo "$(GREEN)Installation complete!$(RESET)"
 	@echo "$(YELLOW)Next steps:$(RESET)"

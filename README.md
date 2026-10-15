@@ -46,16 +46,58 @@ bunx oh-my-opencode-slim@latest install
 opencode
 ```
 
+### Installing `oa` on PATH
+
+The CLI is `bin/oa` inside the repo (it needs the repo — the registry and skill pools live there). Pick one:
+
+```bash
+# Option A — symlink into ~/.local/bin (live: git pull updates it)
+make install-cli
+
+# Option B — PATH entry in ~/.zshrc instead
+export PATH="$HOME/Projects/opencode-agents/bin:$PATH"
+
+# Option C — Homebrew (also works on a fresh laptop, see below)
+brew install --HEAD ./packaging/homebrew/oa.rb
+```
+
+### New Laptop Bootstrap
+
+```bash
+# 1. Get the repo
+git clone git@github.com:cebthedev/opencode-agents.git ~/Projects/opencode-agents
+cd ~/Projects/opencode-agents
+# (or: brew install --HEAD ./packaging/homebrew/oa.rb inside the clone)
+
+# 2. oa on PATH
+make install-cli
+
+# 3. Env + deploy + plugins (same as Quick Start)
+mkdir -p ~/.config/opencode && cp .env.example ~/.config/opencode/.env
+# ...edit .env with your keys...
+oa deploy
+bunx oh-my-opencode-slim@latest install
+npm install -g opencode-auto-fallback
+```
+
+Brew notes: the formula installs the whole repo as a keg (registry, skills,
+configs included) and wraps `oa` with the correct PyYAML path. Update it with
+`brew reinstall --fetch-HEAD oa`. For a private repo, git must be able to
+fetch the URL. Option A is better while you're iterating on bundles — a brew
+keg freezes until you reinstall.
+
 ### Per-Project Setup
 
 Each project loads only the bundles it needs (skills, MCPs, tools — all project-local):
 
 ```bash
 cd your-project
-bin/oa detect                    # suggests bundles from repo signals
-bin/oa use backend-go devops     # writes .oa.yaml, syncs skills, renders opencode.json
-bin/oa doctor                    # verify the profile end-to-end
+oa detect                    # suggests bundles from repo signals
+oa use backend-go devops     # writes .oa.yaml, syncs skills, renders opencode.json
+oa doctor                    # verify the profile end-to-end
 ```
+
+**Custom per-project config:** `.oa.yaml` is the config — it's a plain file, edit it directly to change bundles, or re-run `oa use`. Anything else you put in the project's `opencode.json` (keybinds, provider tweaks, custom agent defs) is preserved — `oa use` only touches the `mcp` block. Precedence: `./.oa.yaml` > `~/.config/oa/profile.yaml` (written by `oa use --global`) > base.
 
 ### Makefile Reference
 

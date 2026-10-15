@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """oa — bundle-based skill loader for AI coding agents.
 
 DB = registry/{bundles,mcps,plugins}/*.yaml (git-versioned). Bundles union
